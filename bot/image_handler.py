@@ -57,12 +57,15 @@ def get_dynamic_placeholder(prompt: str) -> str:
 def generate_flux_image(prompt: str) -> str:
     """Generates an image via HuggingFace Inference API utilizing Flux.1 with local fallback."""
     hf_token = os.getenv("HF_TOKEN")
-    if not hf_token:
-        log_info("[Image AI] 'HF_TOKEN' missing. Using dynamic placeholder...")
+    
+    # Standard stable fallback URL generator
+    def get_fallback():
         return get_dynamic_placeholder(prompt)
 
-    # Updated API logic for 2026 HuggingFace infrastructure
-    # Trying the 'router' or 'v1' endpoints if available, or direct model endpoint
+    if not hf_token:
+        log_info("[Image AI] 'HF_TOKEN' missing. Using dynamic placeholder...")
+        return get_fallback()
+
     API_URLS = [
         f"https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-schnell",
         f"https://router.huggingface.co/hf-inference/models/black-forest-labs/FLUX.1-schnell"
@@ -88,21 +91,21 @@ def generate_flux_image(prompt: str) -> str:
                 image_bytes = response.content
                 file_name = f"hero_{uuid.uuid4().hex}.jpg"
                 public_url = upload_to_supabase(image_bytes, file_name)
-                if public_url: return public_url
+                # If upload to Supabase worked, return that. If not, we will try the next API or fallback.
+                if public_url: 
+                    return public_url
                 
             log_info(f"[Image AI] API failed ({response.status_code}). Trying next...")
         except Exception as e:
             log_info(f"[Image AI] Connection error: {e}")
             continue
 
-    # Final robust fallback to Pollinations.ai (Never returns the same image twice for different titles)
     log_info("[Image AI] All primary APIs failed. Deploying dynamic Pollinations fallback.")
-    return get_dynamic_placeholder(prompt)
+    return get_fallback()
 
 def analyze_and_generate_image(original_url: str, article_title: str) -> str:
     """Downloads original image, streams prompt through Gemini Vision, and renders Flux natively."""
     try:
-        # 1. Download original image buffer
         image_bytes = None
         content_type = 'image/jpeg'
 
@@ -116,12 +119,11 @@ def analyze_and_generate_image(original_url: str, article_title: str) -> str:
             except Exception as e:
                 log_info(f"[Image AI] Failed to fetch source image: {e}")
         
-        # 2. Extract AI visual prompt logic
         max_retries = 3
         attempt = 0
-        prompt_text = f"Analyze the article title: '{article_title}'. Write an image generation prompt (max 400 chars) for a PHOTOREALISTIC, editorial-quality photograph that would accompany this article in a premium tech publication. The image should look like a real photo taken by a professional photographer — NOT an illustration, NOT a 3D render, NOT digital art. Focus on realistic lighting, natural textures, and real-world subjects. ONLY return the prompt text."
+        prompt_text = f"Analyze the article title: '{article_title}'. Write a concise image generation prompt (max 300 chars) for a PHOTOREALISTIC, editorial-quality photograph. ONLY return the prompt text."
         
-        generated_prompt = f"A photorealistic editorial photograph for an article about {article_title}, shot with a Canon EOS R5, natural lighting, sharp focus, 4K resolution."
+        generated_prompt = f"A photorealistic editorial photograph for an article about {article_title}, sharp focus, 4K resolution."
         
         while attempt < max_retries:
             api_key = get_next_api_key()
