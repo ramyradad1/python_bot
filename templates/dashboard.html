@@ -329,6 +329,52 @@
             </div>
         </div>
 
+        <!-- SEO Enhancements Card -->
+        <div class="card" style="border: 1px solid rgba(99,102,241,0.4); background: linear-gradient(135deg, #1a1040 0%, #1e1b4b 50%, #1a2235 100%);">
+            <div class="card-header">
+                <span class="card-title">🚀 تحسينات السيو الذكية (E-E-A-T + الروابط + الجدولة)</span>
+                <span class="phase-badge">جديد</span>
+            </div>
+
+            <div class="grid3">
+                <!-- Smart Scheduling -->
+                <div>
+                    <h4 style="font-size:13px; color:#a5b4fc; margin-bottom:12px;">⏰ نافذة النشر الذكية</h4>
+                    <label for="schedule_quota">عدد المقالات اليومية (6-8 مثالي)</label>
+                    <input type="number" id="schedule_quota" value="{{ settings.get('daily_article_quota', 8) }}" min="1" max="20" title="Daily article quota">
+                    <div style="margin-top:10px;">
+                        <label for="schedule_start_hour">ساعة البداية (24h)</label>
+                        <input type="number" id="schedule_start_hour" value="{{ settings.get('schedule_start_hour', 6) }}" min="0" max="23" title="Schedule start hour">
+                    </div>
+                    <div style="margin-top:10px;">
+                        <label for="schedule_end_hour">ساعة النهاية (24h)</label>
+                        <input type="number" id="schedule_end_hour" value="{{ settings.get('schedule_end_hour', 23) }}" min="0" max="23" title="Schedule end hour">
+                    </div>
+                </div>
+
+                <!-- E-E-A-T Author -->
+                <div>
+                    <h4 style="font-size:13px; color:#a5b4fc; margin-bottom:12px;">👤 بروفايل الكاتب (E-E-A-T)</h4>
+                    <label for="author_name">اسم الكاتب</label>
+                    <input type="text" id="author_name" value="{{ settings.get('author_name', 'Ramy Radad') }}" title="Author name" style="width:100%;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:14px;font-family:inherit">
+                    <p style="font-size:11px;color:var(--text3);margin-top:6px;">هذا الاسم + بيو احترافي هيظهر في كل مقال للثقة مع جوجل.</p>
+                </div>
+
+                <!-- Internal Linking -->
+                <div>
+                    <h4 style="font-size:13px; color:#a5b4fc; margin-bottom:12px;">🔗 الربط الداخلي التلقائي</h4>
+                    <div style="display:flex;align-items:center;gap:10px;margin-top:8px;">
+                        <label class="toggle" for="internal_linking_enabled">
+                            <input type="checkbox" id="internal_linking_enabled" title="Toggle internal linking" {% if settings.get('internal_linking_enabled', true) %}checked{% endif %}>
+                            <span class="slider"></span>
+                        </label>
+                        <span style="font-size:13px;color:var(--text2);">تفعيل الربط الداخلي بين المقالات</span>
+                    </div>
+                    <p style="font-size:11px;color:var(--text3);margin-top:10px;">البوت هيربط المقالات ببعض تلقائياً حسب الـ Tags عن طريق Supabase.</p>
+                </div>
+            </div>
+        </div>
+
         <!-- Save Button -->
         <button class="btn btn-primary btn-block btn-save" onclick="saveAll()">
             💾 حفظ جميع الإعدادات الحالية
@@ -398,7 +444,11 @@
                     competitor_sitemaps: collectSourceList('competitorList'),
                     reddit_subreddits: collectSourceList('redditList'),
                     rss_feeds: collectSourceList('rssList')
-                }
+                },
+                schedule_start_hour: parseInt(document.getElementById('schedule_start_hour').value) || 6,
+                schedule_end_hour: parseInt(document.getElementById('schedule_end_hour').value) || 23,
+                author_name: document.getElementById('author_name').value || 'Ramy Radad',
+                internal_linking_enabled: document.getElementById('internal_linking_enabled').checked
             };
         }
 

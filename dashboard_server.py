@@ -118,6 +118,16 @@ def save():
             "rss_feeds": scraping.get("rss_feeds", []),
         }
     
+    # SEO Enhancements: Smart Scheduling, Author Profile, Internal Linking
+    if "schedule_start_hour" in data:
+        settings["schedule_start_hour"] = int(data.get("schedule_start_hour", 6))
+    if "schedule_end_hour" in data:
+        settings["schedule_end_hour"] = int(data.get("schedule_end_hour", 23))
+    if "author_name" in data:
+        settings["author_name"] = data.get("author_name", "Ramy Radad")
+    if "internal_linking_enabled" in data:
+        settings["internal_linking_enabled"] = bool(data.get("internal_linking_enabled", True))
+    
     save_settings(settings)
     return jsonify({"status": "ok", "message": "تم حفظ الإعدادات بنجاح!"})
 
