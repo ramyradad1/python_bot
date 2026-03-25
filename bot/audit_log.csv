@@ -1,0 +1,197 @@
+Timestamp,Module,Action,Result,Details
+2026-03-25T00:34:02.075202,Pre-Flight,Safety checks completed,SUCCESS,
+2026-03-25T00:34:02.076923,Strategy Engine,Generated novel daily tactics,SUCCESS,
+2026-03-25T00:34:02.092058,Decision Engine,Triaged 4 modules,SUCCESS,
+2026-03-25T00:34:10.492845,Nerve Center,Full autonomous cycle completed,SUCCESS,"Words: 1047, KD: 5.0%"
+2026-03-25T02:37:34.521797,Pre-Flight,Safety checks completed,SUCCESS,
+2026-03-25T02:37:34.521900,Pre-Flight,Safety checks completed,SUCCESS,
+2026-03-25T02:37:34.522439,Pre-Flight,Safety checks completed,SUCCESS,
+2026-03-25T02:37:34.524608,reinforcement_loop,Module execution failed,ERROR,Expecting value: line 1 column 1 (char 0)
+2026-03-25T02:37:34.546012,Strategy Engine,Generated novel daily tactics,SUCCESS,
+2026-03-25T02:37:34.546218,Strategy Engine,Generated novel daily tactics,SUCCESS,
+2026-03-25T02:37:34.546573,Strategy Engine,Generated novel daily tactics,SUCCESS,
+2026-03-25T02:37:34.562695,Decision Engine,Triaged 6 modules,SUCCESS,
+2026-03-25T02:37:34.562809,Decision Engine,Triaged 6 modules,SUCCESS,
+2026-03-25T02:37:34.562949,Decision Engine,Triaged 6 modules,SUCCESS,
+2026-03-25T02:37:59.227009,seo_agent,Module execution failed,ERROR,GEMINI_API_KEYS environment variable is missing or empty. Please set it securely in your .env.local file.
+2026-03-25T02:37:59.338329,seo_agent,Module execution failed,ERROR,GEMINI_API_KEYS environment variable is missing or empty. Please set it securely in your .env.local file.
+2026-03-25T02:37:59.680084,seo_agent,Module execution failed,ERROR,GEMINI_API_KEYS environment variable is missing or empty. Please set it securely in your .env.local file.
+2026-03-25T02:38:04.514140,Pre-Flight,Safety checks completed,SUCCESS,
+2026-03-25T02:38:04.592477,Strategy Engine,Generated novel daily tactics,SUCCESS,
+2026-03-25T02:38:04.611548,Decision Engine,Triaged 6 modules,SUCCESS,
+2026-03-25T02:38:16.805187,seo_agent,Module execution failed,ERROR,GEMINI_API_KEYS environment variable is missing or empty. Please set it securely in your .env.local file.
+2026-03-25T02:38:46.275379,Pre-Flight,Safety checks completed,SUCCESS,
+2026-03-25T02:38:46.300358,Strategy Engine,Generated novel daily tactics,SUCCESS,
+2026-03-25T02:38:46.319108,Decision Engine,Triaged 6 modules,SUCCESS,
+2026-03-25T02:38:58.864992,Nerve Center,Full autonomous cycle completed,SUCCESS,"Words: 1550, KD: 5.0%"
+2026-03-25T02:38:58.900577,Nerve Center,Full autonomous cycle completed,SUCCESS,"Words: 1450, KD: 5.0%"
+2026-03-25T02:39:10.176413,seo_agent,Module execution failed,ERROR,GEMINI_API_KEYS environment variable is missing or empty. Please set it securely in your .env.local file.
+2026-03-25T02:39:18.478011,Nerve Center,Full autonomous cycle completed,SUCCESS,"Words: 1650, KD: 5.0%"
+2026-03-25T02:40:03.463101,Nerve Center,Full autonomous cycle completed,SUCCESS,"Words: 1750, KD: 5.0%"
+2026-03-25T02:51:43.054656,Pre-Flight,Safety checks completed,SUCCESS,
+2026-03-25T02:51:43.074652,Strategy Engine,Generated novel daily tactics,SUCCESS,
+2026-03-25T02:51:43.090896,Decision Engine,Triaged 6 modules,SUCCESS,
+2026-03-25T02:51:56.339424,seo_agent,Module execution failed,ERROR,GEMINI_API_KEYS environment variable is missing or empty. Please set it securely in your .env.local file.
+2026-03-25T02:52:43.391692,Pre-Flight,Safety checks completed,SUCCESS,
+2026-03-25T02:52:43.415491,Strategy Engine,Generated novel daily tactics,SUCCESS,
+2026-03-25T02:52:43.430684,Decision Engine,Triaged 6 modules,SUCCESS,
+2026-03-25T02:52:47.448356,seo_agent,Module execution failed,ERROR,GEMINI_API_KEYS environment variable is missing or empty. Please set it securely in your .env.local file.
+2026-03-25T02:53:00.854403,Nerve Center,Full autonomous cycle completed,SUCCESS,"Words: 1850, KD: 5.0%"
+2026-03-25T02:53:18.520826,Pre-Flight,Safety checks completed,SUCCESS,
+2026-03-25T02:53:18.540693,Strategy Engine,Generated novel daily tactics,SUCCESS,
+2026-03-25T02:53:18.553736,Decision Engine,Triaged 6 modules,SUCCESS,
+2026-03-25T02:53:48.467410,Nerve Center,Full autonomous cycle completed,SUCCESS,"Words: 1950, KD: 5.0%"
+2026-03-25T02:54:51.665698,Nerve Center,Full autonomous cycle completed,SUCCESS,"Words: 2050, KD: 5.0%"
+2026-03-25T02:57:21.119121,Pre-Flight,Safety checks completed,SUCCESS,
+2026-03-25T02:57:21.142198,Strategy Engine,Generated novel daily tactics,SUCCESS,
+2026-03-25T02:57:21.159762,Decision Engine,Triaged 6 modules,SUCCESS,
+2026-03-25T02:58:34.548206,Nerve Center,Full autonomous cycle completed,SUCCESS,"Words: 2150, KD: 5.0%"
+2026-03-25T02:59:20.755828,Pre-Flight,Safety checks completed,SUCCESS,
+2026-03-25T02:59:20.780887,Strategy Engine,Generated novel daily tactics,SUCCESS,
+2026-03-25T02:59:20.796013,Decision Engine,Triaged 6 modules,SUCCESS,
+2026-03-25T02:59:57.487521,Pre-Flight,Safety checks completed,SUCCESS,
+2026-03-25T02:59:57.515233,Strategy Engine,Generated novel daily tactics,SUCCESS,
+2026-03-25T02:59:57.531647,Decision Engine,Triaged 6 modules,SUCCESS,
+2026-03-25T03:00:48.934588,Nerve Center,Full autonomous cycle completed,SUCCESS,"Words: 2250, KD: 5.0%"
+2026-03-25T03:00:53.721395,Nerve Center,Full autonomous cycle completed,SUCCESS,"Words: 2350, KD: 5.0%"
+2026-03-25T03:12:26.753293,Pre-Flight,اكتملت فحوصات الأمان,SUCCESS,
+2026-03-25T03:12:26.753758,Pre-Flight,اكتملت فحوصات الأمان,SUCCESS,
+2026-03-25T03:12:26.755560,reinforcement_loop,فشل تشغيل الوحدة,ERROR,Expecting value: line 1 column 1 (char 0)
+2026-03-25T03:12:26.772239,Strategy Engine,تم توليد استراتيجيات سيو يومية,SUCCESS,
+2026-03-25T03:12:26.772917,Strategy Engine,تم توليد استراتيجيات سيو يومية,SUCCESS,
+2026-03-25T03:12:26.784870,Decision Engine,تم تقييم وتفعيل 6 وحدات,SUCCESS,
+2026-03-25T03:12:52.541587,seo_agent,تم استخراج أحدث قواعد السيو,SUCCESS,
+2026-03-25T03:12:52.561340,seo_agent,تم استخراج أحدث قواعد السيو,SUCCESS,
+2026-03-25T03:13:28.532932,Pre-Flight,اكتملت فحوصات الأمان,SUCCESS,
+2026-03-25T03:13:28.551399,Strategy Engine,تم توليد استراتيجيات سيو يومية,SUCCESS,
+2026-03-25T03:13:28.565064,Decision Engine,تم تقييم وتفعيل 6 وحدات,SUCCESS,
+2026-03-25T03:13:42.766612,seo_agent,تم استخراج أحدث قواعد السيو,SUCCESS,
+2026-03-25T03:13:50.777940,Nerve Center,تم اكتمال دورة النشر الذاتية بنجاح,SUCCESS,"الكلمات: 2350, الكثافة: 5.0%"
+2026-03-25T03:13:50.808783,Nerve Center,تم اكتمال دورة النشر الذاتية بنجاح,SUCCESS,"الكلمات: 2350, الكثافة: 5.0%"
+2026-03-25T03:13:53.095258,Pre-Flight,اكتملت فحوصات الأمان,SUCCESS,
+2026-03-25T03:13:53.118350,Strategy Engine,تم توليد استراتيجيات سيو يومية,SUCCESS,
+2026-03-25T03:13:53.135314,Decision Engine,تم تقييم وتفعيل 6 وحدات,SUCCESS,
+2026-03-25T03:13:55.934291,seo_agent,تم استخراج أحدث قواعد السيو,SUCCESS,
+2026-03-25T03:14:28.704915,Nerve Center,تم اكتمال دورة النشر الذاتية بنجاح,SUCCESS,"الكلمات: 2350, الكثافة: 5.0%"
+2026-03-25T03:14:41.230830,Nerve Center,تم اكتمال دورة النشر الذاتية بنجاح,SUCCESS,"الكلمات: 2350, الكثافة: 5.0%"
+2026-03-25T03:31:56.573541,Pre-Flight,اكتملت فحوصات الأمان,SUCCESS,
+2026-03-25T03:31:56.617841,Strategy Engine,تم توليد استراتيجيات سيو يومية,SUCCESS,
+2026-03-25T03:31:56.640249,Decision Engine,تم تقييم وتفعيل 6 وحدات,SUCCESS,
+2026-03-25T03:32:02.561118,seo_agent,تم استخراج أحدث قواعد السيو,SUCCESS,
+2026-03-25T03:32:58.597243,Nerve Center,تم اكتمال دورة النشر الذاتية بنجاح,SUCCESS,"الكلمات: 2350, الكثافة: 5.0%"
+2026-03-25T03:33:47.079078,Pre-Flight,اكتملت فحوصات الأمان,SUCCESS,
+2026-03-25T03:33:47.139416,Strategy Engine,تم توليد استراتيجيات سيو يومية,SUCCESS,
+2026-03-25T03:33:47.164838,Decision Engine,تم تقييم وتفعيل 6 وحدات,SUCCESS,
+2026-03-25T03:34:00.615573,seo_agent,تم استخراج أحدث قواعد السيو,SUCCESS,
+2026-03-25T03:35:03.852437,Nerve Center,تم اكتمال دورة النشر الذاتية بنجاح,SUCCESS,"الكلمات: 2350, الكثافة: 5.0%"
+2026-03-25T03:40:18.122075,Pre-Flight,اكتملت فحوصات الأمان,SUCCESS,
+2026-03-25T03:40:18.226328,Strategy Engine,تم توليد استراتيجيات سيو يومية,SUCCESS,
+2026-03-25T03:40:18.293923,Decision Engine,تم تقييم وتفعيل 6 وحدات,SUCCESS,
+2026-03-25T03:40:40.041805,seo_agent,تم استخراج أحدث قواعد السيو,SUCCESS,
+2026-03-25T03:41:41.747518,Nerve Center,تم اكتمال دورة النشر الذاتية بنجاح,SUCCESS,"الكلمات: 2350, الكثافة: 5.0%"
+2026-03-25T03:43:15.483797,Pre-Flight,اكتملت فحوصات الأمان,SUCCESS,
+2026-03-25T03:43:15.573162,Strategy Engine,تم توليد استراتيجيات سيو يومية,SUCCESS,
+2026-03-25T03:43:15.636718,Decision Engine,تم تقييم وتفعيل 6 وحدات,SUCCESS,
+2026-03-25T03:43:32.809239,seo_agent,تم استخراج أحدث قواعد السيو,SUCCESS,
+2026-03-25T03:44:35.061680,Nerve Center,تم اكتمال دورة النشر الذاتية بنجاح,SUCCESS,"الكلمات: 2450, الكثافة: 5.0%"
+2026-03-25T08:06:40.310879,Pre-Flight,اكتملت فحوصات الأمان,SUCCESS,
+2026-03-25T08:06:40.397783,Strategy Engine,تم توليد استراتيجيات سيو يومية,SUCCESS,
+2026-03-25T08:06:40.447110,Decision Engine,تم تقييم وتفعيل 6 وحدات,SUCCESS,
+2026-03-25T08:06:44.693359,seo_agent,تم استخراج أحدث قواعد السيو,SUCCESS,
+2026-03-25T08:07:55.662770,Nerve Center,تم اكتمال دورة النشر الذاتية بنجاح,SUCCESS,"الكلمات: 2450, الكثافة: 5.0%"
+2026-03-25T08:30:41.440585,Pre-Flight,اكتملت فحوصات الأمان,SUCCESS,
+2026-03-25T08:30:41.475638,Strategy Engine,تم توليد استراتيجيات سيو يومية,SUCCESS,
+2026-03-25T08:30:41.491863,Decision Engine,تم تقييم وتفعيل 6 وحدات,SUCCESS,
+2026-03-25T08:30:52.558745,seo_agent,تم استخراج أحدث قواعد السيو,SUCCESS,
+2026-03-25T08:31:39.869764,Nerve Center,تم اكتمال دورة النشر الذاتية بنجاح,SUCCESS,"الكلمات: 2450, الكثافة: 5.0%"
+2026-03-25T08:46:55.691300,Pre-Flight,اكتملت فحوصات الأمان,SUCCESS,
+2026-03-25T08:46:55.721845,Strategy Engine,تم توليد استراتيجيات سيو يومية,SUCCESS,
+2026-03-25T08:46:55.736375,Decision Engine,تم تقييم وتفعيل 6 وحدات,SUCCESS,
+2026-03-25T08:47:42.438179,seo_agent,تم استخراج أحدث قواعد السيو,SUCCESS,
+2026-03-25T08:53:26.464311,article_pipeline,انتهت المهلة الزمنية,TIMEOUT,300s
+2026-03-25T08:57:14.156092,test,انتهت المهلة الزمنية,TIMEOUT,2s
+2026-03-25T09:00:59.664302,Pre-Flight,اكتملت فحوصات الأمان,SUCCESS,
+2026-03-25T09:00:59.693712,Strategy Engine,تم توليد استراتيجيات سيو يومية,SUCCESS,
+2026-03-25T09:00:59.710874,Decision Engine,تم تقييم وتفعيل 6 وحدات,SUCCESS,
+2026-03-25T09:01:02.746024,seo_agent,تم استخراج أحدث قواعد السيو,SUCCESS,
+2026-03-25T09:06:52.689408,article_pipeline,انتهت المهلة الزمنية,TIMEOUT,300s
+2026-03-25T09:07:07.062791,Nerve Center,تم اكتمال دورة النشر الذاتية بنجاح,SUCCESS,"الكلمات: 2450, الكثافة: 5.0%"
+2026-03-25T09:25:57.875873,Pre-Flight,اكتملت فحوصات الأمان,SUCCESS,
+2026-03-25T09:25:57.940100,Strategy Engine,تم توليد استراتيجيات سيو يومية,SUCCESS,
+2026-03-25T09:25:57.965786,Decision Engine,تم تقييم وتفعيل 6 وحدات,SUCCESS,
+2026-03-25T09:26:04.565482,seo_agent,تم استخراج أحدث قواعد السيو,SUCCESS,
+2026-03-25T09:36:01.860239,Pre-Flight,اكتملت فحوصات الأمان,SUCCESS,
+2026-03-25T09:36:01.884463,Strategy Engine,تم توليد استراتيجيات سيو يومية,SUCCESS,
+2026-03-25T09:36:01.899873,Decision Engine,تم تقييم وتفعيل 6 وحدات,SUCCESS,
+2026-03-25T09:36:04.690299,seo_agent,تم استخراج أحدث قواعد السيو,SUCCESS,
+2026-03-25T09:41:00.560008,article_pipeline,فشل تشغيل الوحدة,ERROR,[Errno 22] Invalid argument
+2026-03-25T09:41:16.689363,Nerve Center,تم اكتمال دورة النشر الذاتية بنجاح,SUCCESS,"الكلمات: 2450, الكثافة: 5.0%"
+2026-03-25T09:42:40.310198,algo_update_radar,فشل تشغيل الوحدة,ERROR,[Errno 22] Invalid argument
+2026-03-25T09:42:40.313071,Pre-Flight,اكتملت فحوصات الأمان,SUCCESS,
+2026-03-25T09:42:40.342215,Strategy Engine,تم توليد استراتيجيات سيو يومية,SUCCESS,
+2026-03-25T09:42:40.358915,Decision Engine,تم تقييم وتفعيل 6 وحدات,SUCCESS,
+2026-03-25T09:42:43.118450,seo_agent,تم استخراج أحدث قواعد السيو,SUCCESS,
+2026-03-25T09:43:15.549940,ab_tester,فشل تشغيل الوحدة,ERROR,[Errno 22] Invalid argument
+2026-03-25T09:48:24.568912,sitemap_generator,فشل تشغيل الوحدة,ERROR,[Errno 22] Invalid argument
+2026-03-25T09:48:24.584395,Nerve Center,تم اكتمال دورة النشر الذاتية بنجاح,SUCCESS,"الكلمات: 2450, الكثافة: 5.0%"
+2026-03-25T09:54:32.235158,Pre-Flight,اكتملت فحوصات الأمان,SUCCESS,
+2026-03-25T09:54:32.274460,Strategy Engine,تم توليد استراتيجيات سيو يومية,SUCCESS,
+2026-03-25T09:54:32.290704,Decision Engine,تم تقييم وتفعيل 6 وحدات,SUCCESS,
+2026-03-25T09:54:35.831034,seo_agent,تم استخراج أحدث قواعد السيو,SUCCESS,
+2026-03-25T09:55:02.315001,competitor_monitor,فشل تشغيل الوحدة,ERROR,[Errno 22] Invalid argument
+2026-03-25T09:59:37.510274,article_pipeline,فشل تشغيل الوحدة,ERROR,[Errno 22] Invalid argument
+2026-03-25T09:59:52.180468,Nerve Center,تم اكتمال دورة النشر الذاتية بنجاح,SUCCESS,"الكلمات: 2450, الكثافة: 5.0%"
+2026-03-25T10:03:42.734764,algo_update_radar,فشل تشغيل الوحدة,ERROR,[Errno 22] Invalid argument
+2026-03-25T10:03:42.738969,Pre-Flight,اكتملت فحوصات الأمان,SUCCESS,
+2026-03-25T10:03:42.786183,Strategy Engine,تم توليد استراتيجيات سيو يومية,SUCCESS,
+2026-03-25T10:03:42.803409,Decision Engine,تم تقييم وتفعيل 6 وحدات,SUCCESS,
+2026-03-25T10:03:43.750603,seo_agent,تم استخراج أحدث قواعد السيو,SUCCESS,
+2026-03-25T10:09:15.692936,article_pipeline,انتهت المهلة الزمنية,TIMEOUT,300s
+2026-03-25T10:09:33.264141,Nerve Center,تم اكتمال دورة النشر الذاتية بنجاح,SUCCESS,"الكلمات: 2450, الكثافة: 5.0%"
+2026-03-25T10:10:44.351151,Pre-Flight,اكتملت فحوصات الأمان,SUCCESS,
+2026-03-25T10:10:44.391633,Strategy Engine,تم توليد استراتيجيات سيو يومية,SUCCESS,
+2026-03-25T10:10:44.408188,Decision Engine,تم تقييم وتفعيل 6 وحدات,SUCCESS,
+2026-03-25T10:10:49.576777,audit_logger,فشل تشغيل الوحدة,ERROR,[Errno 22] Invalid argument
+2026-03-25T10:15:23.925327,article_pipeline,فشل تشغيل الوحدة,ERROR,[Errno 22] Invalid argument
+2026-03-25T10:15:39.505575,Nerve Center,تم اكتمال دورة النشر الذاتية بنجاح,SUCCESS,"الكلمات: 2450, الكثافة: 5.0%"
+2026-03-25T10:24:03.052061,test,تجربة,SUCCESS,ok
+2026-03-25T10:26:07.183821,algo_update_radar,فشل تشغيل الوحدة,ERROR,[Errno 22] Invalid argument
+2026-03-25T10:26:07.187982,Pre-Flight,اكتملت فحوصات الأمان,SUCCESS,
+2026-03-25T10:26:07.226545,Strategy Engine,تم توليد استراتيجيات سيو يومية,SUCCESS,
+2026-03-25T10:26:07.244807,Decision Engine,تم تقييم وتفعيل 6 وحدات,SUCCESS,
+2026-03-25T10:26:32.451831,seo_agent,تم استخراج أحدث قواعد السيو,SUCCESS,
+2026-03-25T10:27:05.830998,content_refresh,فشل تشغيل الوحدة,ERROR,[Errno 22] Invalid argument
+2026-03-25T10:32:05.838539,article_pipeline,انتهت المهلة الزمنية,TIMEOUT,300s
+2026-03-25T10:34:52.045144,Pre-Flight,اكتملت فحوصات الأمان,SUCCESS,
+2026-03-25T10:34:52.078931,Strategy Engine,تم توليد استراتيجيات سيو يومية,SUCCESS,
+2026-03-25T10:34:52.095161,Decision Engine,تم تقييم وتفعيل 6 وحدات,SUCCESS,
+2026-03-25T10:34:57.436273,seo_agent,فشل تشغيل الوحدة,ERROR,[Errno 22] Invalid argument
+2026-03-25T10:34:57.437315,seo_agent,تم استخراج أحدث قواعد السيو,SUCCESS,
+2026-03-25T10:40:33.164127,article_pipeline,انتهت المهلة الزمنية,TIMEOUT,300s
+2026-03-25T10:40:33.673770,auto_media,فشل تشغيل الوحدة,ERROR,[Errno 22] Invalid argument
+2026-03-25T10:40:47.784893,Nerve Center,تم اكتمال دورة النشر الذاتية بنجاح,SUCCESS,"الكلمات: 2350, الكثافة: 5.0%"
+2026-03-25T10:46:46.079380,Pre-Flight,اكتملت فحوصات الأمان,SUCCESS,
+2026-03-25T10:46:46.112629,Strategy Engine,تم توليد استراتيجيات سيو يومية,SUCCESS,
+2026-03-25T10:46:46.130526,Decision Engine,تم تقييم وتفعيل 6 وحدات,SUCCESS,
+2026-03-25T10:46:47.052145,seo_agent,تم استخراج أحدث قواعد السيو,SUCCESS,
+2026-03-25T10:47:20.562632,ab_tester,فشل تشغيل الوحدة,ERROR,[Errno 22] Invalid argument
+2026-03-25T10:47:45.925590,التحضير,تم تقييم 6 وحدة,SUCCESS,
+2026-03-25T10:52:20.573179,article_pipeline,انتهت المهلة الزمنية,TIMEOUT,300s
+2026-03-25T10:52:21.155983,ad_optimizer,فشل تشغيل الوحدة,ERROR,[Errno 22] Invalid argument
+2026-03-25T10:52:36.229654,Nerve Center,تم اكتمال دورة النشر الذاتية بنجاح,SUCCESS,"الكلمات: 2350, الكثافة: 5.0%"
+2026-03-25T10:52:45.941017,article_pipeline,انتهت المهلة الزمنية,TIMEOUT,
+2026-03-25T10:52:45.942506,article_pipeline,لم يتم نشر مقالات,SUCCESS,quota/no-links
+2026-03-25T10:53:21.473658,Nerve Center,اكتملت الدورة بنجاح,SUCCESS,كلمات: 2350
+2026-03-25T10:55:07.640218,Pre-Flight,اكتملت فحوصات الأمان,SUCCESS,
+2026-03-25T10:55:07.667245,Strategy Engine,تم توليد استراتيجيات سيو يومية,SUCCESS,
+2026-03-25T10:55:07.686927,Decision Engine,تم تقييم وتفعيل 6 وحدات,SUCCESS,
+2026-03-25T10:55:10.688101,seo_agent,تم استخراج أحدث قواعد السيو,SUCCESS,
+2026-03-25T10:58:57.095516,التحضير,تم تقييم 6 وحدة,SUCCESS,
+2026-03-25T11:03:57.111872,article_pipeline,انتهت المهلة الزمنية,TIMEOUT,
+2026-03-25T11:03:57.114356,article_pipeline,لم يتم نشر مقالات,SUCCESS,quota/no-links
+2026-03-25T11:04:07.293575,Nerve Center,اكتملت الدورة بنجاح,SUCCESS,كلمات: 2450
+2026-03-25T14:06:04.854100,التحضير,تم تقييم 6 وحدة,SUCCESS,
+2026-03-25T14:11:04.867389,article_pipeline,انتهت المهلة الزمنية,TIMEOUT,
+2026-03-25T14:11:04.868111,article_pipeline,لم يتم نشر مقالات,SUCCESS,quota/no-links
+2026-03-25T14:12:05.395695,competitor_monitor,انتهت المهلة الزمنية,TIMEOUT,
+2026-03-25T14:12:05.404840,Nerve Center,اكتملت الدورة بنجاح,SUCCESS,كلمات: 2450

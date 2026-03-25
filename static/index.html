@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technify Bot | Control Center</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.344.0/dist/umd/lucide.min.js"></script>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --bg: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        .config-input {
+            width: 100%;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid var(--border);
+            padding: 1rem;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .config-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        .config-textarea {
+            resize: vertical;
+        }
+
+        .config-hint {
+            margin-top: 0.5rem;
+            margin-bottom: 0;
+            font-size: 0.85rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            background-image: 
+                radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 100% 100%, rgba(139, 92, 246, 0.15) 0%, transparent 50%);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        .navbar {
+            padding: 2rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #818cf8 0%, #c084fc 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 99px;
+            background: var(--glass);
+            border: 1px solid var(--border);
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10b981;
+            box-shadow: 0 0 10px #10b981;
+        }
+
+        .main-container {
+            padding: 2rem 5%;
+            flex: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 1024px) {
+            .grid { grid-template-columns: 1fr; }
+        }
+
+        .card {
+            background: var(--card-bg);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(99, 102, 241, 0.4);
+        }
+
+        h2 {
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border);
+            padding: 1rem;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn:hover {
+            background: var(--primary-hover);
+            transform: scale(1.02);
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.2);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: var(--glass);
+            border: 1px solid var(--border);
+        }
+
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .description-text {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .card-wide {
+            grid-column: span 1.5;
+        }
+
+        .scheduler-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .logs-window {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            height: 300px;
+            overflow-y: auto;
+            padding: 1rem;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.85rem;
+            color: #a5f3fc;
+            border: 1px solid var(--border);
+        }
+
+        .log-entry {
+            margin-bottom: 0.5rem;
+            border-left: 2px solid var(--primary);
+            padding-left: 10px;
+        }
+
+        .log-time { color: var(--text-muted); font-size: 0.75rem; }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 1rem 2rem;
+            background: #10b981;
+            color: white;
+            border-radius: 12px;
+            display: none;
+            animation: slideUp 0.3s ease;
+            z-index: 1000;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Select Input Styling */
+        select.config-input {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1rem;
+            cursor: pointer;
+        }
+        select.config-input option {
+            background-color: var(--bg);
+            color: var(--text-main);
+        }
+        
+        /* Range Slider Styling */
+        .range-labels {
+            display: flex; 
+            justify-content: space-between; 
+            font-size: 0.8rem; 
+            color: var(--text-muted); 
+            margin-bottom: 0.5rem;
+        }
+        input[type="range"] {
+            width: 100%;
+            accent-color: var(--primary);
+            height: 6px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 5px;
+            outline: none;
+            margin-bottom: 1.5rem;
+        }
+        
+        .checkbox-group {
+            display: flex; align-items: center; gap: 10px; margin-bottom: 2rem;
+        }
+        .checkbox-input {
+            accent-color: var(--primary); width: 18px; height: 18px; cursor: pointer;
+        }
+        .checkbox-label {
+            margin: 0; padding-top: 2px; cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">
+            <i data-lucide="bot"></i> Technify Bot
+        </div>
+        <div class="status-badge">
+            <div class="status-dot"></div>
+            System Online
+        </div>
+    </nav>
+
+    <main class="main-container">
+        <div class="grid">
+            <div class="card">
+                <h2><i data-lucide="send"></i> Magic Publisher</h2>
+                <p class="description-text">Paste a URL from TechCrunch or The Verge to automatically scrape, rewrite with AI, and publish to your website.</p>
+                
+                <div class="input-group">
+                    <label>Target Article URL</label>
+                    <input type="text" id="articleUrl" placeholder="https://techcrunch.com/2026/..." />
+                </div>
+                
+                <button class="btn" id="publishBtn" onclick="triggerPublish()">
+                    <i data-lucide="sparkles"></i>
+                    Start Publishing Pipeline
+                </button>
+            </div>
+
+            <div class="card">
+                <h2><i data-lucide="calendar"></i> Scheduler</h2>
+                <div class="scheduler-controls">
+                    <button class="btn btn-secondary" onclick="controlCron('start')">
+                        <i data-lucide="play"></i> Activate Auto-Pilot
+                    </button>
+                    <button class="btn btn-secondary btn-danger" onclick="controlCron('stop')">
+                        <i data-lucide="square"></i> Stop Scheduler
+                    </button>
+                    <button class="btn btn-secondary" onclick="runCronNow()">
+                        <i data-lucide="refresh-cw"></i> Run Sync Now
+                    </button>
+                </div>
+            </div>
+
+            <div class="card card-wide">
+                <h2><i data-lucide="database"></i> Content Verticals (Sources)</h2>
+                <div class="input-group">
+                    <label for="configSources">Target Sources (One URL per line)</label>
+                    <textarea id="configSources" class="config-input config-textarea" rows="4" placeholder="Enter target URLs..." title="List of target websites"></textarea>
+                </div>
+                <div class="input-group">
+                    <label for="configMaxAge">Max Article Age (Hours)</label>
+                    <input type="number" id="configMaxAge" class="config-input" min="1" max="720" placeholder="24" title="Maximum age in hours" />
+                    <p class="description-text config-hint">Articles older than this won't be collected.</p>
+                </div>
+                <div class="input-group">
+                    <label for="configArticlesPerDay">Target Articles Per Day</label>
+                    <input type="number" id="configArticlesPerDay" class="config-input" min="1" max="50" placeholder="6" title="Target Articles Per Day" />
+                    <p class="description-text config-hint">Controls how many articles the background scheduler triggers natively throughout 24 hours.</p>
+                </div>
+            </div>
+
+            <div class="card card-wide">
+                <h2><i data-lucide="cpu"></i> Synthesis Configuration (AI)</h2>
+                
+                <div class="input-group">
+                    <label for="configAiModel">AI Model</label>
+                    <select id="configAiModel" class="config-input">
+                        <option value="Google Gemini 2.5 Flash">Google Gemini 2.5 Flash</option>
+                        <option value="Google Gemini 1.5 Pro">Google Gemini 1.5 Pro</option>
+                        <option value="OpenAI GPT-4o">OpenAI GPT-4o (Coming Soon)</option>
+                        <option value="Claude 3.5 Sonnet">Claude 3.5 Sonnet (Coming Soon)</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label for="configEditorialDepth">Editorial Depth (Aggregation vs Synthesis)</label>
+                    <div class="range-labels">
+                        <span>Light Aggregation</span>
+                        <span>Balanced</span>
+                        <span>Deep Synthesis</span>
+                    </div>
+                    <input type="range" id="configEditorialDepth" min="0" max="100" value="50" />
+                </div>
+                
+                <div class="input-group">
+                    <label for="configOutputLanguage">Article Output Language</label>
+                    <select id="configOutputLanguage" class="config-input">
+                        <option value="English">English (US)</option>
+                        <option value="Arabic">Arabic (العربية)</option>
+                    </select>
+                    <p class="description-text config-hint">Gemini will automatically translate scraped content from any language exclusively to this output style.</p>
+                </div>
+
+                <button class="btn" id="saveConfigBtn" onclick="saveConfig()">
+                    <i data-lucide="save"></i> Save Configuration
+                </button>
+            </div>
+
+            <div class="card card-wide">
+                <h2><i data-lucide="terminal"></i> Activity Logs</h2>
+                <div class="logs-window" id="logs">
+                    <div class="log-entry">
+                        <span class="log-time">[11:25:00]</span> Welcome to Technify Bot Dashboard.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="toast" id="toast">Task started in background!</div>
+
+    <script>
+        lucide.createIcons();
+
+        let lastLogs = [];
+
+        async function pollLogs() {
+            try {
+                const response = await fetch('/api/logs');
+                const data = await response.json();
+                const newLogs = data.logs || [];
+                
+                // Only update if there are new logs or content changed
+                if (JSON.stringify(newLogs) !== JSON.stringify(lastLogs)) {
+                    const logsDiv = document.getElementById('logs');
+                    logsDiv.innerHTML = ''; // Rebuild to ensure correct order
+                    
+                    newLogs.reverse().forEach(msg => {
+                        const entry = document.createElement('div');
+                        entry.className = 'log-entry';
+                        
+                        // Extract [HH:MM:SS] part
+                        const timeMatch = msg.match(/^\[(.*?)\]/);
+                        const timeStr = timeMatch ? timeMatch[0] : "";
+                        const content = msg.replace(timeStr, "").trim();
+                        
+                        entry.innerHTML = `<span class="log-time">${timeStr}</span> ${content}`;
+                        logsDiv.appendChild(entry);
+                    });
+                    
+                    lastLogs = newLogs;
+                }
+            } catch (err) {
+                console.error("Failed to poll logs:", err);
+            }
+        }
+
+        async function loadConfig() {
+            try {
+                const res = await fetch('/api/config');
+                const data = await res.json();
+                document.getElementById('configSources').value = data.sources.join('\n');
+                document.getElementById('configMaxAge').value = data.max_age_hours;
+                document.getElementById('configArticlesPerDay').value = data.articles_per_day || 6;
+                document.getElementById('configAiModel').value = data.ai_model || "Google Gemini 2.5 Flash";
+                document.getElementById('configEditorialDepth').value = data.editorial_depth ?? 50;
+                document.getElementById('configOutputLanguage').value = data.auto_translate ? "Arabic" : "English";
+            } catch (e) {
+                console.error("Failed to load config", e);
+            }
+        }
+
+        async function saveConfig() {
+            const sourcesText = document.getElementById('configSources').value;
+            const sources = sourcesText.split('\n').map(s => s.trim()).filter(s => s.length > 0);
+            const maxAge = parseInt(document.getElementById('configMaxAge').value) || 24;
+            const articlesPerDay = parseInt(document.getElementById('configArticlesPerDay').value) || 6;
+            const aiModel = document.getElementById('configAiModel').value;
+            const editorialDepth = parseInt(document.getElementById('configEditorialDepth').value) || 50;
+            const autoTranslate = document.getElementById('configOutputLanguage').value === "Arabic";
+
+            const btn = document.getElementById('saveConfigBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i data-lucide="loader" class="animate-spin"></i> Saving...';
+            lucide.createIcons();
+
+            try {
+                const res = await fetch('/api/config', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        sources: sources, 
+                        max_age_hours: maxAge,
+                        articles_per_day: articlesPerDay,
+                        ai_model: aiModel,
+                        editorial_depth: editorialDepth,
+                        auto_translate: autoTranslate
+                    })
+                });
+                const data = await res.json();
+                showToast(data.message);
+            } catch (e) {
+                showToast("Failed to save config.");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i data-lucide="save"></i> Save Configuration';
+                lucide.createIcons();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadConfig();
+            pollLogs();
+            setInterval(pollLogs, 2000);
+        });
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.style.display = 'block';
+            setTimeout(() => t.style.display = 'none', 3000);
+        }
+
+        async function triggerPublish() {
+            const url = document.getElementById('articleUrl').value;
+            if (!url) return alert('Please enter a URL');
+
+            const btn = document.getElementById('publishBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i data-lucide="loader" class="animate-spin"></i> Processing...';
+            lucide.createIcons();
+
+            try {
+                const res = await fetch('/api/publish', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({url})
+                });
+                const data = await res.json();
+                showToast(data.message);
+            } catch (e) {
+                console.error(e);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i data-lucide="sparkles"></i> Start Publishing Pipeline';
+                lucide.createIcons();
+            }
+        }
+
+        async function controlCron(action) {
+            try {
+                const res = await fetch(`/api/cron/${action}`, {method: 'POST'});
+                const data = await res.json();
+                showToast(data.message);
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        async function runCronNow() {
+            try {
+                const res = await fetch(`/api/cron/run-now`, {method: 'POST'});
+                const data = await res.json();
+                showToast(data.message);
+            } catch (e) {
+                console.error(e);
+            }
+        }
+    </script>
+</body>
+</html>

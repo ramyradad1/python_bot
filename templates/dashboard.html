@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مركز التحكم - الذكاء الاصطناعي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{
+            --bg:#0a0e1a;--surface:#111827;--card:#1a2235;--border:#2a3548;
+            --primary:#6366f1;--primary-glow:rgba(99,102,241,0.25);
+            --success:#10b981;--warning:#f59e0b;--danger:#ef4444;
+            --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+        }
+        body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+        .topbar{background:linear-gradient(135deg,#111827 0%,#1e1b4b 100%);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+        .topbar h1{font-size:20px;font-weight:700;background:linear-gradient(135deg,#818cf8,#6366f1,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+        .topbar .status{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--success)}
+        .topbar .status::before{content:'';width:8px;height:8px;background:var(--success);border-radius:50%;animation:pulse 2s infinite}
+        @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+        .container{max-width:1400px;margin:0 auto;padding:24px}
+        .grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+        .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+        @media(max-width:900px){.grid2,.grid3{grid-template-columns:1fr}}
+        .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:20px;transition:border-color .2s}
+        .card:hover{border-color:var(--primary)}
+        .card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+        .card-title{font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text2)}
+        .phase-badge{font-size:10px;padding:3px 10px;border-radius:20px;font-weight:600;background:var(--primary-glow);color:#a5b4fc}
+        .quick-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+        .stat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;text-align:center}
+        .stat-value{font-size:28px;font-weight:900;background:linear-gradient(135deg,#818cf8,#6366f1);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+        .stat-label{font-size:11px;color:var(--text3);margin-top:4px;text-transform:uppercase;letter-spacing:1px}
+        label{display:block;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+        input[type=number],select{width:100%;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:14px;font-family:inherit}
+        input[type=number]:focus,select:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-glow)}
+        input[type=range]{width:100%;accent-color:var(--primary);margin:8px 0}
+        .range-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--text3)}
+        .btn{padding:12px 24px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s}
+        .btn-primary{background:linear-gradient(135deg,#6366f1,#4f46e5);color:#fff;box-shadow:0 4px 14px var(--primary-glow)}
+        .btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 20px var(--primary-glow)}
+        .btn-danger{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff}
+        .btn-success{background:linear-gradient(135deg,#10b981,#059669);color:#fff}
+        .btn-block{width:100%;margin-top:12px}
+        .btn-sm{font-size:11px;padding:6px 12px}
+        .btn-sm-success{font-size:11px;padding:6px 12px;background:var(--success);color:#fff;margin-right:6px}
+        .btn-run{font-size:18px;padding:16px 48px}
+        .btn-stop{font-size:18px;padding:16px 48px;background:var(--danger);border:none;border-radius:12px;color:#fff;cursor:pointer;font-family:inherit;font-weight:700;transition:all .3s}
+        .btn-stop:hover{background:#dc2626;transform:translateY(-2px)}
+        .btn-stop:disabled{opacity:.5;cursor:not-allowed;transform:none}
+        .launch-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+        .bot-status{margin-top:12px;padding:10px 20px;border-radius:10px;font-weight:700;text-align:center;font-size:14px}
+        .bot-status.idle{color:var(--text3);background:rgba(255,255,255,0.03)}
+        .bot-status.running{color:var(--success);background:rgba(16,185,129,0.1);animation:pulse-status 2s ease-in-out infinite}
+        .bot-status.stopping{color:var(--warning);background:rgba(245,158,11,0.1)}
+        @keyframes pulse-status{0%,100%{opacity:1}50%{opacity:.6}}
+        .run-output{margin-top:16px;background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px;font-family:'Courier New',monospace;font-size:12px;color:var(--success);white-space:pre-wrap;max-height:400px;overflow-y:auto;display:none}
+        .log-line-ok{color:var(--success)}
+        .log-line-err{color:var(--danger)}
+        .log-line-skip{color:var(--text3)}
+        .log-line-step{color:var(--primary);font-weight:700}
+        .log-line-run{color:var(--warning)}
+        .module-grid{display:flex;flex-direction:column;gap:10px}
+        .module-item{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--bg);border-radius:10px;border:1px solid var(--border)}
+        .module-item:hover{border-color:var(--primary)}
+        .module-info{flex:1}
+        .module-name{font-size:13px;font-weight:600;color:var(--text)}
+        .module-desc{font-size:10px;color:var(--text3);margin-top:2px}
+        .toggle{position:relative;width:44px;height:24px;flex-shrink:0;margin-left:10px}
+        .toggle input{opacity:0;width:0;height:0}
+        .toggle .slider{position:absolute;top:0;left:0;right:0;bottom:0;background:#374151;border-radius:24px;cursor:pointer;transition:.3s}
+        .toggle .slider::before{content:'';position:absolute;height:18px;width:18px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.3s}
+        .toggle input:checked+.slider{background:var(--primary)}
+        .toggle input:checked+.slider::before{transform:translateX(20px)}
+        .region-grid{display:flex;flex-wrap:wrap;gap:8px}
+        .region-chip{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--text2);transition:all .2s;-webkit-user-select:none;user-select:none}
+        .region-chip.active{background:var(--primary);border-color:var(--primary);color:#fff;box-shadow:0 2px 8px var(--primary-glow)}
+        .toast{position:fixed;top:20px;right:20px;padding:14px 24px;border-radius:10px;font-size:14px;font-weight:500;z-index:9999;transform:translateX(120%);transition:transform .3s;box-shadow:0 8px 30px rgba(0,0,0,.4)}
+        .toast.show{transform:translateX(0)}
+        .toast-success{background:var(--success);color:#fff}
+        .toast-error{background:var(--danger);color:#fff}
+        .log-box{max-height:250px;overflow-y:auto;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px;font-family:'Courier New',monospace;font-size:11px;color:var(--text2);line-height:1.7}
+        .log-entry{padding:4px 0;border-bottom:1px solid rgba(255,255,255,.03)}
+        .log-muted{color:var(--text3)}
+        .section-title{font-size:18px;font-weight:700;margin:28px 0 16px;padding-bottom:8px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+        .run-output{margin-top:16px;max-height:300px;overflow-y:auto;background:#000;border-radius:10px;padding:16px;font-family:'Courier New',monospace;font-size:12px;color:#10b981;white-space:pre-wrap;display:none}
+        .launch-card{text-align:center;background:linear-gradient(135deg,#1a1040,#1e1b4b,#1a2235)}
+        .launch-title{font-size:22px;margin-bottom:8px}
+        .launch-desc{color:var(--text3);margin-bottom:16px;font-size:13px}
+        .pub-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+        .seo-spacing{margin-top:14px}
+        .geo-hint{font-size:12px;color:var(--text3);margin-bottom:12px}
+        .source-section{margin-bottom:20px}
+        .source-section h4{font-size:13px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+        .source-icon{font-size:16px}
+        .source-list{display:flex;flex-direction:column;gap:6px}
+        .source-item{display:flex;align-items:center;gap:8px}
+        .source-item input{flex:1;padding:8px 12px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:inherit}
+        .source-item input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-glow)}
+        .btn-icon{width:32px;height:32px;border:none;border-radius:8px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+        .btn-icon-add{background:var(--primary);color:#fff}
+        .btn-icon-add:hover{background:#4f46e5}
+        .btn-icon-remove{background:rgba(239,68,68,0.15);color:var(--danger)}
+        .btn-icon-remove:hover{background:rgba(239,68,68,0.3)}
+        .source-add-row{display:flex;align-items:center;gap:8px;margin-top:8px}
+        .source-add-row input{flex:1;padding:8px 12px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:inherit}
+        .source-add-row input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-glow)}
+        .scraping-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+        @media(max-width:1100px){.scraping-grid{grid-template-columns:1fr}}
+    </style>
+</head>
+<body>
+    <div class="topbar">
+        <h1>مجلس القيادة الذكي - Nerve Center</h1>
+        <div class="status">النظام يعمل | {{ now }}</div>
+    </div>
+
+    <div class="container">
+        <!-- Quick Stats -->
+        <div class="quick-stats">
+            <div class="stat">
+                <div class="stat-value">{{ settings.daily_article_quota }}</div>
+                <div class="stat-label">مقال باليوم</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">{{ settings.scheduler_interval_hours }}h</div>
+                <div class="stat-label">تكرار التشغيل</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">{{ settings.modules.values()|select|list|length }}</div>
+                <div class="stat-label">الوحدات المفعلة</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">{{ settings.target_regions|length }}</div>
+                <div class="stat-label">الدول المستهدفة</div>
+            </div>
+        </div>
+
+        <!-- Run Button -->
+        <div class="card launch-card">
+            <h2 class="launch-title">تشغيل النشر الذاتي</h2>
+            <p class="launch-desc">أطلق دورة الذكاء الاصطناعي الكاملة للبحث والكتابة والنشر (حسب الوحدات المفعلة)</p>
+            <div class="launch-btns">
+                <button class="btn btn-primary btn-run" onclick="startBot()" id="startBtn">▶ ابدأ التشغيل</button>
+                <button class="btn-stop" onclick="stopBot()" id="stopBtn" disabled>⛔ إيقاف البوت</button>
+            </div>
+            <div class="bot-status idle" id="botStatus">البوت متوقف — جاهز للتشغيل</div>
+            <div class="run-output" id="runOutput"></div>
+        </div>
+
+        <div class="grid2">
+            <!-- LEFT COLUMN -->
+            <div>
+                <!-- Publishing Controls -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">إعدادات النشر الدورية</span>
+                        <span class="phase-badge">أساسي</span>
+                    </div>
+                    <div class="pub-grid">
+                        <div>
+                            <label for="daily_article_quota">عدد المقالات باليوم</label>
+                            <input type="number" id="daily_article_quota" title="Number of articles to publish per day" placeholder="3" value="{{ settings.daily_article_quota }}" min="1" max="50">
+                        </div>
+                        <div>
+                            <label for="scheduler_interval_hours">تكرار التشغيل (بالساعات)</label>
+                            <input type="number" id="scheduler_interval_hours" title="How often the bot runs in hours" placeholder="6" value="{{ settings.scheduler_interval_hours }}" min="1" max="24">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEO Parameters -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">معايير وخصائص السيو (SEO)</span>
+                        <span class="phase-badge">أساسي</span>
+                    </div>
+                    <div>
+                        <label for="target_word_count">عدد الكلمات المستهدف: <span id="wcVal">{{ settings.target_word_count }}</span></label>
+                        <input type="range" id="target_word_count" title="Target word count for articles" placeholder="1500" min="500" max="3000" step="50" value="{{ settings.target_word_count }}" oninput="document.getElementById('wcVal').textContent=this.value">
+                        <div class="range-labels"><span>500</span><span>1500</span><span>3000</span></div>
+                    </div>
+                    <div class="seo-spacing">
+                        <label for="target_image_count">عدد الصور المستهدف: <span id="imgVal">{{ settings.target_image_count }}</span></label>
+                        <input type="range" id="target_image_count" title="Target number of images per article" placeholder="3" min="0" max="15" value="{{ settings.target_image_count }}" oninput="document.getElementById('imgVal').textContent=this.value">
+                        <div class="range-labels"><span>0</span><span>7</span><span>15</span></div>
+                    </div>
+                    <div class="seo-spacing">
+                        <label for="target_keyword_density">الكثافة المفتاحية المتوقعة %: <span id="kdVal">{{ settings.target_keyword_density }}</span></label>
+                        <input type="range" id="target_keyword_density" title="Target keyword density percentage" placeholder="2.5" min="0.5" max="8" step="0.5" value="{{ settings.target_keyword_density }}" oninput="document.getElementById('kdVal').textContent=this.value">
+                        <div class="range-labels"><span>0.5%</span><span>4%</span><span>8%</span></div>
+                    </div>
+                </div>
+
+                <!-- Geo Targeting -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">الدول المستهدفة (أسواق التريندات)</span>
+                        <span class="phase-badge">تريندات</span>
+                    </div>
+                    <p class="geo-hint">اضغط لاختيار الدول التي سيقوم البوت بمراقبة مواضيعها الرائجة لكتابة مقالات عنها استباقياً.</p>
+                    <div class="region-grid" id="regionGrid">
+                        {% for code, name in regions.items() %}
+                        <div class="region-chip {% if code in settings.target_regions %}active{% endif %}" data-region="{{ code }}" onclick="toggleRegion(this)">
+                            {{ name }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Memory & Audit -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">ذاكرة البوت الحية (القرارات السابقة)</span>
+                        <span class="phase-badge">ذكاء اصطناعي</span>
+                    </div>
+                    <div class="log-box">
+                        {% for entry in memory %}
+                        <div class="log-entry">[{{ entry.timestamp[:16] }}] {{ entry.action }} -> {{ entry.result }}</div>
+                        {% endfor %}
+                        {% if not memory %}
+                        <div class="log-entry log-muted">لا يوجد ذكريات مسجلة بعد. سيقوم البوت بالتخزين هنا ليتعلم من أخطائه...</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT COLUMN: Module Toggles -->
+            <div>
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">التحكم بوحدات الذكاء الاصطناعي ({{ modules|length }} وحدة)</span>
+                        <div>
+                            <button class="btn btn-sm-success" onclick="toggleAll(true)">تشغيل الكل</button>
+                            <button class="btn btn-sm-danger" onclick="toggleAll(false)">إيقاف الكل</button>
+                        </div>
+                    </div>
+                    <div class="module-grid" id="moduleGrid">
+                        {% for key, meta in modules.items() %}
+                        <div class="module-item">
+                            <div class="module-info">
+                                <div class="module-name">{{ meta.name }}</div>
+                                <div class="module-desc">P{{ meta.phase }} | {{ meta.desc }}</div>
+                            </div>
+                            <label class="toggle" for="mod_{{ key }}">
+                                <input type="checkbox" id="mod_{{ key }}" data-module="{{ key }}" title="Toggle {{ meta.name }}" {% if settings.modules.get(key, true) %}checked{% endif %}>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Audit Log -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">سجل إجراءات البوت (تاريخ العمليات)</span>
+                        <span class="phase-badge">شفافية</span>
+                    </div>
+                    <div class="log-box">
+                        {% for entry in audit %}
+                        <div class="log-entry">[{{ entry.Timestamp[:16] }}] [{{ entry.Module }}] {{ entry.Action }} -> <strong class="{% if entry.Result == 'SUCCESS' %}text-success{% elif entry.Result == 'ERROR' %}text-danger{% endif %}">{{ entry.Result }}</strong></div>
+                        {% endfor %}
+                        {% if not audit %}
+                        <div class="log-entry log-muted">لا توجد عمليات مسجلة بعد...</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scraping Sources -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">مصادر سحب وتوليد المحتوى (المنافسون والمجتمع)</span>
+                <span class="phase-badge">مباشر</span>
+            </div>
+            <p class="geo-hint">حدد المواقع والمنتديات ومصادر الأخبار التي يحللها البوت ليسرق منها الأفكار ويصوغ منها محتوى حصري وفريد لموقعك.</p>
+            <div class="scraping-grid">
+                <!-- Competitor Sitemaps -->
+                <div class="source-section">
+                    <h4><span class="source-icon">🌐</span> خرائط مواقع المنافسين</h4>
+                    <div class="source-list" id="competitorList">
+                        {% for url in settings.scraping_sources.competitor_sitemaps %}
+                        <div class="source-item">
+                            <input type="text" value="{{ url }}" title="Competitor URL" placeholder="https://example.com">
+                            <button class="btn-icon btn-icon-remove" onclick="this.parentElement.remove()" title="Remove">✕</button>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="source-add-row">
+                        <input type="text" id="newCompetitor" placeholder="https://competitor.com" title="New competitor URL">
+                        <button class="btn-icon btn-icon-add" onclick="addSource('competitorList','newCompetitor')" title="Add">+</button>
+                    </div>
+                </div>
+                <!-- Reddit Subreddits -->
+                <div class="source-section">
+                    <h4><span class="source-icon">🤖</span> منتديات ريديت (Reddit)</h4>
+                    <div class="source-list" id="redditList">
+                        {% for sub in settings.scraping_sources.reddit_subreddits %}
+                        <div class="source-item">
+                            <input type="text" value="{{ sub }}" title="Subreddit" placeholder="r/technology">
+                            <button class="btn-icon btn-icon-remove" onclick="this.parentElement.remove()" title="Remove">✕</button>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="source-add-row">
+                        <input type="text" id="newReddit" placeholder="r/subreddit" title="New subreddit">
+                        <button class="btn-icon btn-icon-add" onclick="addSource('redditList','newReddit')" title="Add">+</button>
+                    </div>
+                </div>
+                <!-- RSS Feeds -->
+                <div class="source-section">
+                    <h4><span class="source-icon">📡</span> خلاصات (RSS Feeds) الأخبار</h4>
+                    <div class="source-list" id="rssList">
+                        {% for feed in settings.scraping_sources.rss_feeds %}
+                        <div class="source-item">
+                            <input type="text" value="{{ feed }}" title="RSS Feed URL" placeholder="https://example.com/rss.xml">
+                            <button class="btn-icon btn-icon-remove" onclick="this.parentElement.remove()" title="Remove">✕</button>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="source-add-row">
+                        <input type="text" id="newRss" placeholder="https://example.com/feed.xml" title="New RSS feed URL">
+                        <button class="btn-icon btn-icon-add" onclick="addSource('rssList','newRss')" title="Add">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Save Button -->
+        <button class="btn btn-primary btn-block btn-save" onclick="saveAll()">
+            💾 حفظ جميع الإعدادات الحالية
+        </button>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        function showToast(msg, type='success') {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.className = 'toast toast-' + type + ' show';
+            setTimeout(() => t.classList.remove('show'), 3000);
+        }
+
+        function toggleRegion(el) {
+            el.classList.toggle('active');
+        }
+
+        function toggleAll(state) {
+            document.querySelectorAll('#moduleGrid input[type=checkbox]').forEach(cb => cb.checked = state);
+        }
+
+        function addSource(listId, inputId) {
+            const input = document.getElementById(inputId);
+            const val = input.value.trim();
+            if (!val) return;
+            const list = document.getElementById(listId);
+            const div = document.createElement('div');
+            div.className = 'source-item';
+            div.innerHTML = `<input type="text" value="${val}" title="Source URL" placeholder="URL"><button class="btn-icon btn-icon-remove" onclick="this.parentElement.remove()" title="Remove">✕</button>`;
+            list.appendChild(div);
+            input.value = '';
+        }
+
+        function collectSourceList(listId) {
+            const items = [];
+            document.querySelectorAll('#' + listId + ' .source-item input').forEach(inp => {
+                const v = inp.value.trim();
+                if (v) items.push(v);
+            });
+            return items;
+        }
+
+        function collectSettings() {
+            const modules = {};
+            document.querySelectorAll('#moduleGrid input[type=checkbox]').forEach(cb => {
+                modules[cb.dataset.module] = cb.checked;
+            });
+
+            const regions = [];
+            document.querySelectorAll('.region-chip.active').forEach(el => {
+                regions.push(el.dataset.region);
+            });
+
+            return {
+                daily_article_quota: document.getElementById('daily_article_quota').value,
+                scheduler_interval_hours: document.getElementById('scheduler_interval_hours').value,
+                target_word_count: document.getElementById('target_word_count').value,
+                target_image_count: document.getElementById('target_image_count').value,
+                target_keyword_density: document.getElementById('target_keyword_density').value,
+                target_regions: regions,
+                modules: modules,
+                scraping_sources: {
+                    competitor_sitemaps: collectSourceList('competitorList'),
+                    reddit_subreddits: collectSourceList('redditList'),
+                    rss_feeds: collectSourceList('rssList')
+                }
+            };
+        }
+
+        async function saveAll() {
+            try {
+                const res = await fetch('/api/save', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(collectSettings())
+                });
+                const data = await res.json();
+                showToast(data.message || 'تم الحفظ بنجاح!', 'success');
+            } catch(e) {
+                showToast('فشل الحفظ: ' + e.message, 'error');
+            }
+        }
+
+        let evtSource = null;
+
+        function colorLog(line) {
+            if (line.includes('✅')) return '<span class="log-line-ok">' + line + '</span>';
+            if (line.includes('❌') || line.includes('ERROR') || line.includes('فشلت')) return '<span class="log-line-err">' + line + '</span>';
+            if (line.includes('تخطي') || line.includes('SKIP')) return '<span class="log-line-skip">' + line + '</span>';
+            if (line.includes('━━')) return '<span class="log-line-step">' + line + '</span>';
+            if (line.includes('▶') || line.includes('جاري')) return '<span class="log-line-run">' + line + '</span>';
+            return line;
+        }
+
+        function updateUI(running, stopping) {
+            const startBtn = document.getElementById('startBtn');
+            const stopBtn = document.getElementById('stopBtn');
+            const status = document.getElementById('botStatus');
+            if (running) {
+                startBtn.disabled = true;
+                stopBtn.disabled = stopping;
+                if (stopping) {
+                    status.className = 'bot-status stopping';
+                    status.textContent = 'جاري الإيقاف...';
+                } else {
+                    status.className = 'bot-status running';
+                    status.textContent = '🟢 البوت يعمل الآن...';
+                }
+            } else {
+                startBtn.disabled = false;
+                stopBtn.disabled = true;
+                status.className = 'bot-status idle';
+                status.textContent = 'البوت متوقف — جاهز للتشغيل';
+            }
+        }
+
+        async function startBot() {
+            const output = document.getElementById('runOutput');
+            output.style.display = 'block';
+            output.innerHTML = '';
+
+            try {
+                const res = await fetch('/api/start', { method: 'POST' });
+                const data = await res.json();
+                if (data.status === 'error') {
+                    showToast(data.message, 'error');
+                    return;
+                }
+                showToast('تم تشغيل البوت!', 'success');
+                updateUI(true, false);
+                startLogStream();
+            } catch(e) {
+                showToast('خطأ في الاتصال: ' + e.message, 'error');
+            }
+        }
+
+        async function stopBot() {
+            try {
+                const res = await fetch('/api/stop', { method: 'POST' });
+                const data = await res.json();
+                showToast(data.message, data.status === 'ok' ? 'success' : 'error');
+                updateUI(true, true);
+            } catch(e) {
+                showToast('خطأ: ' + e.message, 'error');
+            }
+        }
+
+        function startLogStream() {
+            if (evtSource) evtSource.close();
+            evtSource = new EventSource('/api/logs');
+            const output = document.getElementById('runOutput');
+
+            evtSource.onmessage = function(e) {
+                try {
+                    const msg = JSON.parse(e.data);
+                    if (msg.log) {
+                        output.innerHTML += colorLog(msg.log) + '\n';
+                        output.scrollTop = output.scrollHeight;
+                    }
+                    if (msg.status !== undefined) {
+                        updateUI(msg.status, msg.stop_requested);
+                        if (!msg.status && evtSource) {
+                            // Bot finished or stopped
+                            evtSource.close();
+                            evtSource = null;
+                        }
+                    }
+                } catch(err) {}
+            };
+
+            evtSource.onerror = function() {
+                if (evtSource) evtSource.close();
+                evtSource = null;
+                updateUI(false, false);
+            };
+        }
+
+        // Check initial status on page load
+        fetch('/api/status').then(r => r.json()).then(data => {
+            updateUI(data.running, data.stop_requested);
+            if (data.running) {
+                document.getElementById('runOutput').style.display = 'block';
+                startLogStream();
+            }
+        }).catch(()=>{});
+    </script>
+</body>
+</html>

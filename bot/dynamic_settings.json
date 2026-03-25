@@ -1,0 +1,71 @@
+{
+    "dynamic_seo_rules": [
+        "Ensure titles and snippets contain the primary target keyword(s) directly and are immediately indicative of the page's core content.",
+        "Tailor the snippet text to explicitly address a specific user intent (e.g., 'Learn about X', 'Find Y offers', 'Contact Z') highlighting relevant actions or benefits.",
+        "Use clear prefixes or descriptive phrases in titles to signal the content's type or specific focus (e.g., 'Product:', 'Help:', 'Offers:') for better categorization."
+    ],
+    "last_seo_research_date": "2026-03-25T10:28:30.355612",
+    "target_word_count": 2450,
+    "target_image_count": 8,
+    "target_keyword_density": 5.0,
+    "last_ml_update_date": "2026-03-25T14:11:05.313378",
+    "daily_article_quota": 15,
+    "publish_delay_range": [10, 60],
+    "scheduler_interval_hours": 6,
+    "target_regions": [
+        "us",
+        "gb",
+        "de",
+        "fr",
+        "ca",
+        "au"
+    ],
+    "modules": {
+        "reinforcement_loop": true,
+        "strategy_generator": true,
+        "decision_engine": true,
+        "article_pipeline": true,
+        "ml_engine": true,
+        "competitor_monitor": true,
+        "sitemap_generator": true
+    },
+    "scraping_sources": {
+        "competitor_sitemaps": [
+            "https://techcrunch.com",
+            "https://theverge.com",
+            "https://arstechnica.com",
+            "https://wired.com",
+            "https://thenextweb.com",
+            "https://hackernoon.com",
+            "https://hashnode.com",
+            "https://www.freecodecamp.org/news",
+            "https://www.kdnuggets.com",
+            "https://css-tricks.com",
+            "https://davidwalsh.name",
+            "https://martinfowler.com",
+            "https://www.sitepoint.com/blog",
+            "https://openai.com/blog",
+            "https://deepmind.google/discover/blog",
+            "https://huggingface.co/blog",
+            "https://towardsdatascience.com",
+            "https://www.technologyreview.com",
+            "https://www.gsmarena.com",
+            "https://www.androidauthority.com",
+            "https://www.phonearena.com",
+            "https://www.tomsguide.com",
+            "https://www.cnet.com/tech/mobile/"
+        ],
+        "reddit_subreddits": [
+            "r/technology",
+            "r/techsupport",
+            "r/webdev",
+            "r/programming",
+            "r/artificial"
+        ],
+        "rss_feeds": [
+            "https://feeds.feedburner.com/TechCrunch",
+            "https://www.theverge.com/rss/index.xml",
+            "https://hnrss.org/frontpage"
+        ]
+    }
+}
