@@ -176,12 +176,15 @@ def search_for_sources(
     3. Only add site: for a bonus round to find forum-specific content
     """
     try:
-        from duckduckgo_search import DDGS
+        from ddgs import DDGS
     except ImportError:
-        log_info(
-            "[Search] 'duckduckgo-search' package not installed. Skipping auto-discovery."
-        )
-        return []
+        try:
+            from duckduckgo_search import DDGS
+        except ImportError:
+            log_info(
+                "[Search] 'ddgs' package not installed. Run: pip install ddgs"
+            )
+            return []
 
     discovered_urls: dict[str, bool] = {}
 
