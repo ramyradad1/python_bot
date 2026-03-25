@@ -684,14 +684,28 @@ def save_article(article_html: str, topic: str) -> str | None:
 def run_seo_bot(stop_check=None):
     """
     Main entry point triggered by the Nerve Center dashboard.
+    Full pipeline: Search → Scrape → Generate → Image → Publish to Supabase.
     """
     if stop_check and stop_check(): return
 
     log_info("=" * 50)
-    log_info("  [SEO Error Bot] بدء صيد الأخطاء التقنية ذات الـ CPC العالي")
+    log_info("  [SEO Error Bot] 🎯 بدء صيد الأخطاء التقنية ذات الـ CPC العالي")
     log_info("=" * 50)
 
     start_time = datetime.now()
+
+    # ── Load SEO Settings ──
+    import json as _json
+    _settings_path = os.path.join(os.path.dirname(__file__), "bot", "dynamic_settings.json")
+    if not os.path.exists(_settings_path):
+        _settings_path = os.path.join(os.path.dirname(__file__), "bot/dynamic_settings.json")
+    try:
+        with open(_settings_path, "r", encoding="utf-8") as _f:
+            seo_settings = _json.load(_f)
+    except Exception:
+        seo_settings = {}
+    
+    author_name = seo_settings.get("author_name", "Ramy Radad")
 
     # ── Step 1: Load API Key ──
     api_key = get_next_api_key()
@@ -745,16 +759,92 @@ def run_seo_bot(stop_check=None):
     topic = extract_topic(article_html)
     thumbnail_path = generate_thumbnail(client, topic, stop_check=stop_check)
 
-    # ── Step 6: Save Outputs ──
+    # ── Step 6: Save Locally ──
     article_path = save_article(article_html, topic)
+    
+    # ── Step 7: Inject E-E-A-T Author Bio ──
+    author_bio_html = f"""
+    <div class="author-bio" style="margin-top: 3rem; padding: 1.5rem; background: #f8f9fa; border-left: 4px solid #0f3460; border-radius: 8px;">
+        <h3 style="margin-top: 0; color: #16213e;">About the Author: {author_name}</h3>
+        <p style="margin-bottom: 0; font-size: 0.95rem; line-height: 1.6;">
+            {author_name} is a Senior Systems Engineer with extensive hands-on experience in enterprise IT infrastructure. 
+            He specializes in managing <strong>Office 365 environments</strong>, deploying advanced <strong>Access Points</strong> and networking solutions, 
+            and integrating <strong>Smart Locks</strong> and <strong>Biometric attendance devices</strong>. 
+            Through his work, he has resolved hundreds of complex technical issues for businesses worldwide.
+        </p>
+    </div>
+    """
+    article_html_with_bio = article_html + author_bio_html
+    
+    # ── Step 8: Publish to Supabase ──
+    try:
+        from bot.supabase_client import get_supabase_client
+        from bot.publisher import sanitize_slug
+        supabase = get_supabase_client()
+        
+        if supabase:
+            from datetime import timezone
+            slug = re.sub(r"[^a-zA-Z0-9]+", "-", topic.lower()).strip("-")[:80]
+            
+            # Try to get a hero image URL
+            hero_image_url = ""
+            if thumbnail_path:
+                try:
+                    from bot.image_handler import upload_to_supabase
+                    with open(thumbnail_path, "rb") as img_f:
+                        img_bytes = img_f.read()
+                    hero_image_url = upload_to_supabase(img_bytes, os.path.basename(thumbnail_path)) or ""
+                except Exception as e:
+                    log_info(f"[SEO Error Bot] ⚠️ Image upload failed: {e}")
+            
+            # Extract tags from niche
+            tags = []
+            if niche_name and niche_name != "Random Niche":
+                tags = [t.strip() for t in niche_name.replace("&", ",").split(",") if t.strip()]
+            for d in scraped_data[:2]:
+                for code in d.get("error_codes", [])[:3]:
+                    tags.append(code)
+            
+            article_doc = {
+                "title": topic,
+                "slug": slug,
+                "metaDescription": f"Complete step-by-step guide to troubleshoot and fix {topic}. Expert solutions from a Senior Systems Engineer.",
+                "content": article_html_with_bio,
+                "category": niche_name,
+                "tags": tags[:10],
+                "author": author_name,
+                "sourceUrl": source_urls[0] if source_urls else "",
+                "heroImage": hero_image_url,
+                "views": 0,
+                "status": "published",
+                "createdAt": datetime.now(timezone.utc).isoformat(),
+                "publishedAt": datetime.now(timezone.utc).isoformat(),
+            }
+            
+            supabase.table('articles').insert(article_doc).execute()
+            log_info(f"[SEO Error Bot] ✅ Published to Supabase: /articles/{slug}")
+            
+            # Internal linking
+            if seo_settings.get("internal_linking_enabled", True):
+                try:
+                    from bot.internal_linker import inject_internal_links
+                    inject_internal_links(topic, slug, tags)
+                except Exception as e:
+                    log_info(f"[SEO Error Bot] ⚠️ Internal linking error: {e}")
+        else:
+            log_info("[SEO Error Bot] ⚠️ Supabase not configured. Article saved locally only.")
+            
+    except Exception as e:
+        log_info(f"[SEO Error Bot] ⚠️ Supabase publish failed: {e}. Article saved locally.")
 
     # ── Pipeline Summary ──
     elapsed = (datetime.now() - start_time).total_seconds()
     log_info(f"[SEO Error Bot] ✅ اكتملت الدورة في {elapsed:.1f} ثانية")
     log_info(f"  - النيتش: {niche_name}")
-    log_info(f"  - المقالات المسحوبة: {len(scraped_data)}")
-    log_info(f"  - المقال المنتج: {article_path or 'فشل'}")
-    log_info(f"  - الصورة المنتجة: {thumbnail_path or 'فشلت'}")
+    log_info(f"  - المصادر المسحوبة: {len(scraped_data)}")
+    log_info(f"  - المقال: {article_path or 'فشل'}")
+    log_info(f"  - الصورة: {thumbnail_path or 'فشلت'}")
+    log_info(f"  - الكاتب: {author_name}")
     log_info("=" * 50)
 
 

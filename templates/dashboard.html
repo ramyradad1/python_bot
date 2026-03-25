@@ -382,6 +382,30 @@
             <p style="font-size:11px;color:var(--text3);margin-top:8px;text-align:center;">يشتغل مستقل — هيضيف بروفايل الكاتب والروابط الداخلية لكل المقالات الموجودة في الداتابيز بدون ما يأثر على البوت الأصلي.</p>
         </div>
 
+        <!-- SEO Error Bot Card -->
+        <div class="card" style="border: 1px solid rgba(16,185,129,0.4); background: linear-gradient(135deg, #0a2e1f 0%, #064e3b 50%, #0a2e2e 100%);">
+            <div class="card-header">
+                <span class="card-title">🎯 بوت صيد أخطاء الـ IT (High-CPC)</span>
+                <span class="phase-badge" style="background:#10b981;color:#000;">مستقل</span>
+            </div>
+            <div style="padding:0 8px;">
+                <p style="font-size:13px;color:#a7f3d0;line-height:1.7;margin-bottom:12px;">
+                    بوت مستقل تماماً عن البوت الأصلي. بيبحث عن أخطاء IT الغالية في المنتديات (Reddit, StackOverflow, Microsoft Tech Community) 
+                    وبيكتب مقالات Step-by-Step بالـ Gemini وينشرها مباشرة على الموقع مع صور Imagen 3.0 حصرية.
+                </p>
+                <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;">
+                    <span style="font-size:11px;padding:4px 10px;background:rgba(16,185,129,0.2);border:1px solid rgba(16,185,129,0.3);border-radius:12px;color:#6ee7b7;">☁️ Cloud $15-40</span>
+                    <span style="font-size:11px;padding:4px 10px;background:rgba(239,68,68,0.2);border:1px solid rgba(239,68,68,0.3);border-radius:12px;color:#fca5a5;">🔒 Cybersecurity $20-50</span>
+                    <span style="font-size:11px;padding:4px 10px;background:rgba(59,130,246,0.2);border:1px solid rgba(59,130,246,0.3);border-radius:12px;color:#93c5fd;">💻 SaaS Errors $10-30</span>
+                    <span style="font-size:11px;padding:4px 10px;background:rgba(245,158,11,0.2);border:1px solid rgba(245,158,11,0.3);border-radius:12px;color:#fcd34d;">📞 Managed IT $25-60+</span>
+                </div>
+                <button class="btn" style="width:100%;padding:14px;font-size:15px;background:linear-gradient(135deg,#10b981,#059669);border:none;color:#fff;border-radius:10px;cursor:pointer;font-weight:bold;" onclick="runErrorBot()" id="errorBotBtn">
+                    🎯 تشغيل بوت صيد الأخطاء الآن
+                </button>
+                <p style="font-size:11px;color:#6ee7b7;margin-top:8px;text-align:center;opacity:0.7;">بيشتغل مستقل تماماً — بيبحث ← بيسحب ← بيكتب ← بينشر على الموقع أوتوماتيك</p>
+            </div>
+        </div>
+
         <!-- Save Button -->
         <button class="btn btn-primary btn-block btn-save" onclick="saveAll()">
             💾 حفظ جميع الإعدادات الحالية
@@ -594,6 +618,28 @@
             } finally {
                 btn.disabled = false;
                 btn.textContent = '🚀 تشغيل محسّن السيو الآن';
+            }
+        }
+
+        async function runErrorBot() {
+            const btn = document.getElementById('errorBotBtn');
+            btn.disabled = true;
+            btn.textContent = '⏳ جاري البحث والسحب...';
+            
+            try {
+                const res = await fetch('/api/seo-error-bot', { method: 'POST' });
+                const data = await res.json();
+                showToast(data.message || 'تم تشغيل بوت صيد الأخطاء!', data.status === 'ok' ? 'success' : 'error');
+                const output = document.getElementById('runOutput');
+                output.style.display = 'block';
+                startLogStream();
+            } catch(e) {
+                showToast('فشل تشغيل البوت: ' + e.message, 'error');
+            } finally {
+                setTimeout(() => {
+                    btn.disabled = false;
+                    btn.textContent = '🎯 تشغيل بوت صيد الأخطاء الآن';
+                }, 5000);
             }
         }
     </script>

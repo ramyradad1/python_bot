@@ -197,6 +197,18 @@ def run_seo_enhance():
     return jsonify({"status": "ok", "message": "🚀 جاري تشغيل محسّن السيو في الخلفية... تابع اللوجز!"})
 
 
+@app.route("/api/seo-error-bot", methods=["POST"])
+def run_seo_error_bot():
+    """Run the standalone High-CPC IT Error Hunting Bot in background."""
+    def _error_bot_task():
+        from seo_error_bot import run_seo_bot
+        run_seo_bot()
+    
+    error_bot_thread = threading.Thread(target=_error_bot_task, daemon=True)
+    error_bot_thread.start()
+    return jsonify({"status": "ok", "message": "🎯 بوت صيد أخطاء الـ IT اشتغل! بيبحث عن كلمات غالية في المنتديات..."})
+
+
 @app.route("/api/start", methods=["POST"])
 def start_bot():
     global bot_thread, bot_running
