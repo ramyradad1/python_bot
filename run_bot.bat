@@ -15,6 +15,7 @@ call .\venv\Scripts\activate
 echo [3/4] Ensuring requirements are installed...
 python -m pip install --upgrade pip
 pip install -r requirements.txt
+pip install -r requirements_seo_bot.txt
 pip install flask
 
 echo [4/4] Starting Nerve Center Dashboard...

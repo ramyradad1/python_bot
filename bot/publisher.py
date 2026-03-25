@@ -5,6 +5,19 @@ from dotenv import load_dotenv
 from .logger import log_info
 from .state import GLOBAL_STOP_EVENT
 import time
+import re
+
+def sanitize_slug(raw_slug: str, title: str) -> str:
+    if not raw_slug or len(raw_slug) < 5:
+        raw_slug = title
+    slug = raw_slug.lower()
+    slug = re.sub(r'[^a-z0-9]+', '-', slug)
+    slug = slug.strip('-')
+    slug = re.sub(r'-\d+$', '', slug)  # remove trailing numbers
+    words = slug.split('-')
+    if len(words) > 8:
+        slug = '-'.join(words[:8])
+    return slug[:60].strip('-')
 
 from .scraper import scrape_article
 from .rewriter import rewrite_article
@@ -92,19 +105,34 @@ def process_scraped_data(scraped_data: dict) -> bool:
     log_info("[Publisher] Synthesizing primary Hero Image for the article...")
     hero_image = process_article_image(candidate_original_url, rewritten.get('title', 'Technology Article'))
 
-    american_names = ['John Davis', 'Emily Chen', 'Michael Reynolds', 'Sarah Thompson', 'David Sterling']
-    random_author = random.choice(american_names)
+    # E-E-A-T Author Profile
+    author_name = "Ramy Radad"
+    author_bio_html = """
+    <div class="author-bio" style="margin-top: 3rem; padding: 1.5rem; background: #f8f9fa; border-left: 4px solid #0f3460; border-radius: 8px;">
+        <h3 style="margin-top: 0; color: #16213e;">About the Author: Ramy Radad</h3>
+        <p style="margin-bottom: 0; font-size: 0.95rem; line-height: 1.6;">
+            Ramy is a Senior Systems Engineer with extensive hands-on experience in enterprise IT infrastructure. 
+            He specializes in managing <strong>Office 365 environments</strong>, deploying advanced <strong>Access Points</strong> and networking solutions, 
+            and integrating <strong>Smart Locks</strong> and <strong>Biometric attendance devices</strong>. 
+            Through his work, he has resolved hundreds of complex technical issues for businesses worldwide.
+        </p>
+    </div>
+    """
+    final_html += author_bio_html
+    
+    clean_slug = sanitize_slug(rewritten.get('slug', ''), rewritten.get('title', ''))
+    rewritten['slug'] = clean_slug
 
     # 5. Save to Database (Supabase PostgreSQL)
     try:
         article_document = {
             "title": rewritten.get('title'),
-            "slug": rewritten.get('slug'),
+            "slug": clean_slug,
             "metaDescription": rewritten.get('metaDescription'),
             "content": final_html,
             "category": rewritten.get('category'),
             "tags": rewritten.get('tags', []),
-            "author": random_author,
+            "author": author_name,
             "sourceUrl": url,
             "heroImage": hero_image,
             "views": 0,
@@ -127,6 +155,10 @@ def process_scraped_data(scraped_data: dict) -> bool:
                 tags=rewritten.get('tags', [])
             )
             auto_share_article(metrics)
+            
+            # 7. Semantic Internal Linking
+            from .internal_linker import inject_internal_links
+            inject_internal_links(rewritten.get('title', ''), clean_slug, rewritten.get('tags', []))
             
             return True
         else:

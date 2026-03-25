@@ -9,7 +9,9 @@
     "target_image_count": 8,
     "target_keyword_density": 5.0,
     "last_ml_update_date": "2026-03-25T14:11:05.313378",
-    "daily_article_quota": 15,
+    "daily_article_quota": 8,
+    "schedule_start_hour": 6,
+    "schedule_end_hour": 23,
     "publish_delay_range": [10, 60],
     "scheduler_interval_hours": 6,
     "target_regions": [

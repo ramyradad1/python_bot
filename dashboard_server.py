@@ -46,6 +46,7 @@ MODULE_LABELS = {
     "ml_engine": {"name": "محرك التعلم الآلي", "phase": 3, "desc": "يحلل بيانات الأداء ويحسّن إعدادات المقالات."},
     "competitor_monitor": {"name": "مراقب المنافسين", "phase": 3, "desc": "يفحص مواقع المنافسين للمحتوى الجديد."},
     "sitemap_generator": {"name": "مولد خريطة الموقع", "phase": 3, "desc": "يحدث sitemap.xml ويرسله لمحركات البحث."},
+    "seo_error_bot": {"name": "بوت الأخطاء التقنية (SEO)", "phase": 2, "desc": "يصطاد مشاكل الـ IT وينشر حلولها في مقالات سيو عالية الربح."},
 }
 
 def load_settings():

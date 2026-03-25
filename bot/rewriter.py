@@ -69,6 +69,7 @@ def rewrite_article(original_title: str, original_html: str,
         - Place the PRIMARY keyword naturally in the first 100 words, in at least ONE <h2>, and in the meta description.
         - Use 2-4 <h2> subheadings and 1-2 <h3> subheadings. Each must be descriptive and contain related keywords.
         - Write a UNIQUE, compelling meta description (120-155 chars) that contains the main keyword and a call-to-action.
+        - The slug MUST be clean, keyword-rich, and contain ONLY lowercase letters and hyphens (no numbers, dates, or symbols, max 6-8 words).
         - Use short paragraphs (2-4 sentences max). Break up walls of text.
         - Add a Table of Contents hint: at the top, include a brief summary (2-3 sentences) of what the reader will learn.
         - Include at least ONE <blockquote> with an expert opinion or key statistic.
@@ -82,7 +83,7 @@ def rewrite_article(original_title: str, original_html: str,
         Return output EXCLUSIVELY as strict, valid JSON:
         {{
           "title": "A punchy, engaging title a human editor would write (max 60 chars)",
-          "slug": "url-slug-in-english-with-hyphens",
+          "slug": "keyword-rich-slug-max-8-words-lowercase-hyphens-only-no-numbers",
           "metaDescription": "A click-worthy meta description (max 155 chars)",
           "content": "Full rewritten article in HTML",
           "category": "One category (e.g., Technology, AI, Gadgets, Science)",

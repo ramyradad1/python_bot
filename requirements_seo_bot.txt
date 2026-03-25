@@ -1,0 +1,18 @@
+# ─────────────────────────────────────────────────────────
+# SEO Content Automation Bot — Requirements
+# Python 3.14 | pip install -r requirements_seo_bot.txt
+# ─────────────────────────────────────────────────────────
+
+# Core AI - Gemini 2.5 Flash + Imagen 3.0
+google-genai
+
+# Web Scraping
+requests
+beautifulsoup4
+lxml
+
+# Keyword-Driven Source Discovery
+duckduckgo-search
+
+# Environment Variable Management
+python-dotenv

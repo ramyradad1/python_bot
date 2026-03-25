@@ -19,6 +19,10 @@ from .decision_engine import decide_priorities
 
 # Step 2: Publish
 from .article_pipeline import run_article_pipeline
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from seo_error_bot import run_seo_bot
 
 # Step 3: Post-publish
 from .ml_engine import run_regression_analysis
@@ -112,6 +116,10 @@ def run_site_controller_with_stop_check(stop_check=None):  # type: ignore
         log_audit("article_pipeline", f"تم نشر {published} مقال", "SUCCESS")
     else:
         log_audit("article_pipeline", "لم يتم نشر مقالات", "SUCCESS", "quota/no-links")
+
+    # ──── تشغيل بوت السيو والأخطاء ────
+    log_info("[مركز التحكم] تشغيل بوت اكتشاف الأخطاء التقنية العالية الربح...")
+    safe_run("seo_error_bot", run_seo_bot, stop_check=stop_check, timeout=PUBLISH_TIMEOUT)
 
     # ──── الخطوة 3: ما بعد النشر ────
     log_info("[مركز التحكم] الخطوة 3/3: تحسين وتحليل")
