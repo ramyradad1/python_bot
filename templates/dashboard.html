@@ -373,6 +373,13 @@
                     <p style="font-size:11px;color:var(--text3);margin-top:10px;">البوت هيربط المقالات ببعض تلقائياً حسب الـ Tags عن طريق Supabase.</p>
                 </div>
             </div>
+
+            <div style="display:flex; gap:12px; margin-top:16px;">
+                <button class="btn btn-success" style="flex:1;padding:14px;font-size:15px;" onclick="runSeoEnhancer()" id="seoRunBtn">
+                    🚀 تشغيل محسّن السيو الآن
+                </button>
+            </div>
+            <p style="font-size:11px;color:var(--text3);margin-top:8px;text-align:center;">يشتغل مستقل — هيضيف بروفايل الكاتب والروابط الداخلية لكل المقالات الموجودة في الداتابيز بدون ما يأثر على البوت الأصلي.</p>
         </div>
 
         <!-- Save Button -->
@@ -568,6 +575,27 @@
                 startLogStream();
             }
         }).catch(()=>{});
+
+        async function runSeoEnhancer() {
+            const btn = document.getElementById('seoRunBtn');
+            btn.disabled = true;
+            btn.textContent = '⏳ جاري التشغيل...';
+            
+            try {
+                const res = await fetch('/api/seo-enhance', { method: 'POST' });
+                const data = await res.json();
+                showToast(data.message || 'تم تشغيل محسّن السيو!', data.status === 'ok' ? 'success' : 'error');
+                // Show log output
+                const output = document.getElementById('runOutput');
+                output.style.display = 'block';
+                startLogStream();
+            } catch(e) {
+                showToast('فشل تشغيل محسّن السيو: ' + e.message, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '🚀 تشغيل محسّن السيو الآن';
+            }
+        }
     </script>
 </body>
 </html>

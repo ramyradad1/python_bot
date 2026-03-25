@@ -185,6 +185,18 @@ class StopBotException(Exception):
     pass
 
 
+@app.route("/api/seo-enhance", methods=["POST"])
+def run_seo_enhance():
+    """Run standalone SEO enhancer (author bio + internal linking) in background."""
+    def _seo_task():
+        from bot.seo_enhancer import run_seo_enhancer
+        run_seo_enhancer()
+    
+    seo_thread = threading.Thread(target=_seo_task, daemon=True)
+    seo_thread.start()
+    return jsonify({"status": "ok", "message": "🚀 جاري تشغيل محسّن السيو في الخلفية... تابع اللوجز!"})
+
+
 @app.route("/api/start", methods=["POST"])
 def start_bot():
     global bot_thread, bot_running
