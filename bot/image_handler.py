@@ -54,6 +54,40 @@ def get_dynamic_placeholder(prompt: str) -> str:
         log_info(f"[Image AI] Dynamic sync failed: {e}")
         return "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200"
 
+def generate_gemini_image(prompt: str) -> str:
+    """Generates an image via Gemini Imagen 3.0 (highest fidelity)."""
+    api_key = get_next_api_key()
+    if not api_key:
+        return ""
+
+    try:
+        log_info(f"[Image AI] Attempting synthesis via Gemini Imagen 3.0...")
+        client = genai.Client(api_key=api_key)
+        
+        # Imagen 3.0 model ID for 2026 infrastructure
+        model_id = 'imagen-3.0-generate-002'
+        
+        response = client.models.generate_images(
+            model=model_id,
+            prompt=prompt,
+            config=types.GenerateImagesConfig(
+                number_of_images=1,
+                output_mime_type='image/jpeg'
+            )
+        )
+        
+        if response and response.generated_images:
+            image_bytes = response.generated_images[0].image.data
+            file_name = f"hero_gemini_{uuid.uuid4().hex}.jpg"
+            public_url = upload_to_supabase(image_bytes, file_name)
+            if public_url:
+                log_info("[Image AI] Gemini Imagen 3.0 synthesis successful.")
+                return public_url
+    except Exception as e:
+        log_info(f"[Image AI] Gemini Imagen synthesis failed: {e}")
+    
+    return ""
+
 def generate_flux_image(prompt: str) -> str:
     """Generates an image via HuggingFace Inference API utilizing Flux.1 with local fallback."""
     hf_token = os.getenv("HF_TOKEN")
@@ -61,6 +95,11 @@ def generate_flux_image(prompt: str) -> str:
     # Standard stable fallback URL generator
     def get_fallback():
         return get_dynamic_placeholder(prompt)
+
+    # NEW: Try Gemini Imagen first as requested by USER
+    gemini_url = generate_gemini_image(prompt)
+    if gemini_url:
+        return gemini_url
 
     if not hf_token:
         log_info("[Image AI] 'HF_TOKEN' missing. Using dynamic placeholder...")
