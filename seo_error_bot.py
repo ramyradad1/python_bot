@@ -20,6 +20,7 @@ import re
 import sys
 import uuid
 import random
+import time
 from datetime import datetime
 from pathlib import Path
 
@@ -164,10 +165,16 @@ BOILERPLATE_SELECTORS = [
 def search_for_sources(
     niche_key: str | None = None,
     custom_keyword: str | None = None,
-    max_results_per_keyword: int = 5,
+    max_results_per_keyword: int = 8,
     stop_check=None,
 ) -> list[str]:
-    """Auto-discover high-value forum posts via DuckDuckGo search."""
+    """Auto-discover high-value forum posts via DuckDuckGo search.
+    
+    Strategy:
+    1. Always start with a BROAD search (keyword + modifier, no site:)
+    2. If broad search fails, retry with just the keyword
+    3. Only add site: for a bonus round to find forum-specific content
+    """
     try:
         from duckduckgo_search import DDGS
     except ImportError:
@@ -191,48 +198,86 @@ def search_for_sources(
             niche_key = random.choice(list(HIGH_VALUE_NICHES.keys()))
             niche = HIGH_VALUE_NICHES[niche_key]
 
-        # Use only 2 keywords per run to save time in the automated pipeline
-        keywords = random.sample(niche["keywords"], min(2, len(niche["keywords"])))
+        # Use 3 keywords per run to increase discovery chances
+        keywords = random.sample(niche["keywords"], min(3, len(niche["keywords"])))
         log_info(
             f"[Search] Selected niche: {niche['name']} (CPC: {niche['cpc_range']})"
         )
 
-    # ── Search for each keyword with modifiers ──
+    def _safe_search(ddgs_instance, query, max_res):
+        """Wrapper to handle DuckDuckGo search with error handling."""
+        try:
+            return list(ddgs_instance.text(query, max_results=max_res, region="us-en"))
+        except Exception as e:
+            log_info(f"[Search] Query failed for '{query}': {e}")
+            return []
+
+    def _extract_urls(results):
+        """Extract valid URLs from search results."""
+        urls = []
+        for result in results:
+            url = result.get("href", "")
+            if url and url.startswith("http"):
+                skip_patterns = [
+                    "/login", "/signup", "/register", "/pricing",
+                    "youtube.com", "facebook.com", "twitter.com",
+                    ".pdf", ".zip", ".exe",
+                ]
+                if not any(pat in url.lower() for pat in skip_patterns):
+                    urls.append(url)
+        return urls
+
+    # ── Search for each keyword ──
     with DDGS() as ddgs:
         for keyword in keywords:
             if stop_check and stop_check(): break
 
+            found_for_keyword = 0
+
+            # --- Pass 1: Broad search with modifier (most likely to return results) ---
             modifier = random.choice(SEARCH_MODIFIERS)
             query = f"{keyword} {modifier}"
+            log_info(f"[Search] Pass 1 - Broad: '{query}'")
+            results = _safe_search(ddgs, query, max_results_per_keyword)
+            new_urls = _extract_urls(results)
+            for u in new_urls:
+                discovered_urls[u] = True
+            found_for_keyword += len(new_urls)
+            log_info(f"[Search] → Found {len(new_urls)} URL(s)")
 
-            if random.random() < 0.5:
+            time.sleep(random.uniform(1.5, 3.0))  # Polite delay
+
+            # --- Pass 2: If Pass 1 found nothing, try just the keyword ---
+            if found_for_keyword == 0:
+                if stop_check and stop_check(): break
+                query = f"{keyword} error fix solution"
+                log_info(f"[Search] Pass 2 - Fallback: '{query}'")
+                results = _safe_search(ddgs, query, max_results_per_keyword)
+                new_urls = _extract_urls(results)
+                for u in new_urls:
+                    discovered_urls[u] = True
+                found_for_keyword += len(new_urls)
+                log_info(f"[Search] → Found {len(new_urls)} URL(s)")
+                
+                time.sleep(random.uniform(1.5, 3.0))
+
+            # --- Pass 3 (Bonus): Site-specific search on a random forum ---
+            if found_for_keyword < 3:
+                if stop_check and stop_check(): break
                 target_site = random.choice(TARGET_FORUMS)
-                query = f"site:{target_site} {keyword} {modifier}"
+                # Use a shorter version of the keyword for site-specific search
+                short_keyword = " ".join(keyword.split()[:4])  # Max 4 words
+                query = f"site:{target_site} {short_keyword}"
+                log_info(f"[Search] Pass 3 - Forum: '{query}'")
+                results = _safe_search(ddgs, query, 3)
+                new_urls = _extract_urls(results)
+                for u in new_urls:
+                    discovered_urls[u] = True
+                log_info(f"[Search] → Found {len(new_urls)} URL(s)")
+                
+                time.sleep(random.uniform(1.0, 2.0))
 
-            try:
-                log_info(f"[Search] Querying: '{query}'")
-                results = ddgs.text(
-                    query,
-                    max_results=max_results_per_keyword,
-                    region="us-en",
-                )
-
-                for result in results:
-                    url = result.get("href", "")
-                    if url and url.startswith("http"):
-                        skip_patterns = [
-                            "/login", "/signup", "/register", "/pricing",
-                            "youtube.com", "facebook.com", "twitter.com",
-                            ".pdf", ".zip", ".exe",
-                        ]
-                        if not any(pat in url.lower() for pat in skip_patterns):
-                            discovered_urls[url] = True
-
-                log_info(f"[Search] Found {len(results)} result(s) for '{keyword}'.")
-
-            except Exception as e:
-                log_info(f"[Search] Query failed for '{query}': {e}")
-                continue
+            log_info(f"[Search] ✓ Total for '{keyword}': {found_for_keyword + len(new_urls)} URL(s)")
 
     urls = list(discovered_urls.keys())
     log_info(
