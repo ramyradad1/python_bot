@@ -64,8 +64,8 @@ def generate_gemini_image(prompt: str) -> str:
         log_info(f"[Image AI] Attempting synthesis via Gemini Imagen 3.0...")
         client = genai.Client(api_key=api_key)
         
-        # Imagen 3.0 model ID for 2026 infrastructure
-        model_id = 'imagen-3.0-generate-002'
+        # Imagen 3.0 Flash as requested by USER
+        model_id = 'imagen-3.0-flash-001'
         
         response = client.models.generate_images(
             model=model_id,
