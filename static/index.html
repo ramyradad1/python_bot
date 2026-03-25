@@ -309,6 +309,34 @@
             margin: 0; padding-top: 2px; cursor: pointer;
         }
 
+        /* Replaced Inline Styles */
+        .card-seo-settings {
+            grid-column: span 2;
+        }
+        .seo-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 2rem;
+        }
+        .seo-section-title {
+            font-size: 1rem;
+            color: #818cf8;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .save-btn-mt {
+            margin-top: 1.5rem;
+        }
+
+        /* Tabs Styling */
+        .tabs { display: flex; gap: 1rem; margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem; }
+        .tab-btn { background: transparent; color: var(--text-muted); border: none; padding: 0.75rem 1.5rem; font-size: 1.1rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; border-radius: 8px; transition: all 0.3s ease; }
+        .tab-btn:hover { color: white; background: var(--glass); }
+        .tab-btn.active { color: var(--primary); background: rgba(99, 102, 241, 0.1); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
     </style>
 </head>
 <body>
@@ -324,7 +352,17 @@
     </nav>
 
     <main class="main-container">
-        <div class="grid">
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('dashboard')" id="btn-dashboard">
+                <i data-lucide="layout-dashboard"></i> Main Dashboard
+            </button>
+            <button class="tab-btn" onclick="switchTab('seo')" id="btn-seo">
+                <i data-lucide="rocket"></i> SEO & Smart Scheduling
+            </button>
+        </div>
+
+        <div id="dashboard" class="tab-content active">
+            <div class="grid">
             <div class="card">
                 <h2><i data-lucide="send"></i> Magic Publisher</h2>
                 <p class="description-text">Paste a URL from TechCrunch or The Verge to automatically scrape, rewrite with AI, and publish to your website.</p>
@@ -354,6 +392,8 @@
                     </button>
                 </div>
             </div>
+
+
 
             <div class="card card-wide">
                 <h2><i data-lucide="database"></i> Content Verticals (Sources)</h2>
@@ -418,7 +458,57 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> <!-- End of grid -->
+        </div> <!-- End of dashboard tab -->
+
+        <div id="seo" class="tab-content">
+            <div class="grid" style="grid-template-columns: 1fr;">
+                <div class="card" style="grid-column: span 1;">
+                    <h2><i data-lucide="clock"></i> Smart Scheduling & SEO Enhancements</h2>
+                    <p class="description-text">Control human-like publishing behavior, E-E-A-T author profile, and internal linking for AdSense compliance.</p>
+
+                    <div class="seo-grid">
+                        <div>
+                            <h3 class="seo-section-title"><i data-lucide="timer"></i> Publish Window</h3>
+                            <div class="input-group">
+                                <label for="scheduleQuota">Daily Article Quota (6-8 recommended)</label>
+                                <input type="number" id="scheduleQuota" class="config-input" min="1" max="20" value="8" />
+                            </div>
+                            <div class="input-group">
+                                <label for="scheduleStartHour">Start Hour (24h format)</label>
+                                <input type="number" id="scheduleStartHour" class="config-input" min="0" max="23" value="6" />
+                            </div>
+                            <div class="input-group">
+                                <label for="scheduleEndHour">End Hour (24h format)</label>
+                                <input type="number" id="scheduleEndHour" class="config-input" min="0" max="23" value="23" />
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="seo-section-title"><i data-lucide="user-check"></i> E-E-A-T Author</h3>
+                            <div class="input-group">
+                                <label for="authorName">Author Name</label>
+                                <input type="text" id="authorName" class="config-input" value="Ramy Radad" />
+                                <p class="description-text config-hint">This name + expert bio appears on every published article for Google Trust Score.</p>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="seo-section-title"><i data-lucide="link"></i> Internal Linking</h3>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="internalLinkingEnabled" class="checkbox-input" checked />
+                                <label for="internalLinkingEnabled" class="checkbox-label">Enable Automatic Internal Linking</label>
+                            </div>
+                            <p class="description-text config-hint">Bot will auto-inject related article links into new and old articles via Supabase tag matching.</p>
+                        </div>
+                    </div>
+
+                    <button class="btn save-btn-mt" id="saveScheduleBtn" onclick="saveScheduleSettings()">
+                        <i data-lucide="save"></i> Save SEO Settings
+                    </button>
+                </div>
+            </div>
+        </div> <!-- End of seo tab -->
     </main>
 
     <div class="toast" id="toast">Task started in background!</div>
@@ -514,9 +604,53 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             loadConfig();
+            loadScheduleSettings();
             pollLogs();
             setInterval(pollLogs, 2000);
         });
+
+        async function loadScheduleSettings() {
+            try {
+                const res = await fetch('/api/schedule');
+                const data = await res.json();
+                document.getElementById('scheduleQuota').value = data.daily_article_quota || 8;
+                document.getElementById('scheduleStartHour').value = data.schedule_start_hour ?? 6;
+                document.getElementById('scheduleEndHour').value = data.schedule_end_hour ?? 23;
+                document.getElementById('authorName').value = data.author_name || 'Ramy Radad';
+                document.getElementById('internalLinkingEnabled').checked = data.internal_linking_enabled !== false;
+            } catch (e) {
+                console.error('Failed to load schedule settings', e);
+            }
+        }
+
+        async function saveScheduleSettings() {
+            const btn = document.getElementById('saveScheduleBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i data-lucide="loader" class="animate-spin"></i> Saving...';
+            lucide.createIcons();
+
+            try {
+                const res = await fetch('/api/schedule', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        daily_article_quota: parseInt(document.getElementById('scheduleQuota').value) || 8,
+                        schedule_start_hour: parseInt(document.getElementById('scheduleStartHour').value) || 6,
+                        schedule_end_hour: parseInt(document.getElementById('scheduleEndHour').value) || 23,
+                        author_name: document.getElementById('authorName').value || 'Ramy Radad',
+                        internal_linking_enabled: document.getElementById('internalLinkingEnabled').checked
+                    })
+                });
+                const data = await res.json();
+                showToast(data.message);
+            } catch (e) {
+                showToast('Failed to save schedule settings.');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i data-lucide="save"></i> Save SEO Settings';
+                lucide.createIcons();
+            }
+        }
 
         function showToast(msg) {
             const t = document.getElementById('toast');
@@ -569,6 +703,15 @@
             } catch (e) {
                 console.error(e);
             }
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            document.getElementById('btn-' + tabId).classList.add('active');
+            lucide.createIcons();
         }
     </script>
 </body>

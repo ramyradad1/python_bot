@@ -105,13 +105,22 @@ def process_scraped_data(scraped_data: dict) -> bool:
     log_info("[Publisher] Synthesizing primary Hero Image for the article...")
     hero_image = process_article_image(candidate_original_url, rewritten.get('title', 'Technology Article'))
 
-    # E-E-A-T Author Profile
-    author_name = "Ramy Radad"
-    author_bio_html = """
+    # E-E-A-T Author Profile (dynamic from settings)
+    import json as _json
+    _settings_path = os.path.join(os.path.dirname(__file__), "dynamic_settings.json")
+    try:
+        with open(_settings_path, "r", encoding="utf-8") as _f:
+            _seo_settings = _json.load(_f)
+    except Exception:
+        _seo_settings = {}
+    author_name = _seo_settings.get("author_name", "Ramy Radad")
+    internal_linking_on = _seo_settings.get("internal_linking_enabled", True)
+    
+    author_bio_html = f"""
     <div class="author-bio" style="margin-top: 3rem; padding: 1.5rem; background: #f8f9fa; border-left: 4px solid #0f3460; border-radius: 8px;">
-        <h3 style="margin-top: 0; color: #16213e;">About the Author: Ramy Radad</h3>
+        <h3 style="margin-top: 0; color: #16213e;">About the Author: {author_name}</h3>
         <p style="margin-bottom: 0; font-size: 0.95rem; line-height: 1.6;">
-            Ramy is a Senior Systems Engineer with extensive hands-on experience in enterprise IT infrastructure. 
+            {author_name} is a Senior Systems Engineer with extensive hands-on experience in enterprise IT infrastructure. 
             He specializes in managing <strong>Office 365 environments</strong>, deploying advanced <strong>Access Points</strong> and networking solutions, 
             and integrating <strong>Smart Locks</strong> and <strong>Biometric attendance devices</strong>. 
             Through his work, he has resolved hundreds of complex technical issues for businesses worldwide.
@@ -156,9 +165,12 @@ def process_scraped_data(scraped_data: dict) -> bool:
             )
             auto_share_article(metrics)
             
-            # 7. Semantic Internal Linking
-            from .internal_linker import inject_internal_links
-            inject_internal_links(rewritten.get('title', ''), clean_slug, rewritten.get('tags', []))
+            # 7. Semantic Internal Linking (conditional)
+            if internal_linking_on:
+                from .internal_linker import inject_internal_links
+                inject_internal_links(rewritten.get('title', ''), clean_slug, rewritten.get('tags', []))
+            else:
+                log_info("[Publisher] Internal linking disabled via dashboard.")
             
             return True
         else:
