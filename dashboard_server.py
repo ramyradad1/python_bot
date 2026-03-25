@@ -162,9 +162,17 @@ def _run_bot_background():
             # Sleep for the configured interval before running again
             settings = load_settings()
             interval_hours = settings.get("scheduler_interval_hours", 6)
-            interval_seconds = interval_hours * 3600
+            is_random = settings.get("random_schedule", False)
             
-            log_info(f"[مركز التحكم] 😴 البوت في وضع السبات... الدورة القادمة بعد {interval_hours} ساعات.")
+            if is_random:
+                import random
+                # 1-2 articles a day means average 12-24 hours between runs
+                interval_hours = random.uniform(10.0, 24.0)
+                log_info(f"[مركز التحكم] 🎲 جدولة عشوائية ذكية: الدورة القادمة بعد {interval_hours:.1f} ساعات.")
+            else:
+                log_info(f"[مركز التحكم] 😴 البوت في وضع السبات... الدورة القادمة بعد {interval_hours} ساعات.")
+                
+            interval_seconds = interval_hours * 3600
             
             # Sleep in chunks to remain responsive to stop requests
             for _ in range(int(interval_seconds)):

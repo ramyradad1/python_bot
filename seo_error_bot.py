@@ -805,6 +805,8 @@ def run_seo_bot(stop_check=None):
                 for code in d.get("error_codes", [])[:3]:
                     tags.append(code)
             
+            publish_status = seo_settings.get("publish_status", "published")
+            
             article_doc = {
                 "title": topic,
                 "slug": slug,
@@ -816,9 +818,9 @@ def run_seo_bot(stop_check=None):
                 "sourceUrl": source_urls[0] if source_urls else "",
                 "heroImage": hero_image_url,
                 "views": 0,
-                "status": "published",
+                "status": publish_status,
                 "createdAt": datetime.now(timezone.utc).isoformat(),
-                "publishedAt": datetime.now(timezone.utc).isoformat(),
+                "publishedAt": datetime.now(timezone.utc).isoformat() if publish_status == 'published' else None,
             }
             
             supabase.table('articles').insert(article_doc).execute()

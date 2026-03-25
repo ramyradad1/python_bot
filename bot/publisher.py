@@ -134,6 +134,8 @@ def process_scraped_data(scraped_data: dict) -> bool:
 
     # 5. Save to Database (Supabase PostgreSQL)
     try:
+        publish_status = _seo_settings.get("publish_status", "published")
+        
         article_document = {
             "title": rewritten.get('title'),
             "slug": clean_slug,
@@ -145,9 +147,9 @@ def process_scraped_data(scraped_data: dict) -> bool:
             "sourceUrl": url,
             "heroImage": hero_image,
             "views": 0,
-            "status": 'published',
+            "status": publish_status,
             "createdAt": datetime.now(timezone.utc).isoformat(),
-            "publishedAt": datetime.now(timezone.utc).isoformat(),
+            "publishedAt": datetime.now(timezone.utc).isoformat() if publish_status == 'published' else None,
         }
 
         client = _get_client()

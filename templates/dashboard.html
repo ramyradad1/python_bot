@@ -155,7 +155,7 @@
                 <!-- Publishing Controls -->
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-title">إعدادات النشر الدورية</span>
+                        <span class="card-title">إعدادات النشر والجدولة</span>
                         <span class="phase-badge">أساسي</span>
                     </div>
                     <div class="pub-grid">
@@ -167,6 +167,26 @@
                             <label for="scheduler_interval_hours">تكرار التشغيل (بالساعات)</label>
                             <input type="number" id="scheduler_interval_hours" title="How often the bot runs in hours" placeholder="6" value="{{ settings.scheduler_interval_hours }}" min="1" max="24">
                         </div>
+                        <div>
+                            <label for="publish_status">حالة نشر المقال</label>
+                            <select id="publish_status" style="width:100%; padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); background:var(--surface2); color:white; font-family:inherit;">
+                                <option value="published" {% if settings.publish_status == 'published' or not settings.publish_status %}selected{% endif %}>🟢 منشور فوراً (Published)</option>
+                                <option value="draft" {% if settings.publish_status == 'draft' %}selected{% endif %}>📝 مسودة للمراجعة (Draft)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 15px; padding: 12px; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px;">
+                        <label class="toggle" for="random_schedule" style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 5px;">
+                            <span style="font-weight: 500; color: #93c5fd;">🎲 جدولة عشوائية ذكية (موصى بها لأدسنس)</span>
+                            <div style="position:relative; width:44px; height:24px;">
+                                <input type="checkbox" id="random_schedule" style="opacity:0; width:0; height:0;" {% if settings.random_schedule %}checked{% endif %}>
+                                <span class="slider" style="position:absolute; top:0; left:0; right:0; bottom:0;"></span>
+                            </div>
+                        </label>
+                        <p style="font-size: 11px; color: #bfdbfe; margin-top: 5px; line-height: 1.5;">
+                            يجعل البوت ينشر 1-2 مقال يومياً في أوقات عشوائية ومتباعدة (مثلاً الظهر وبالليل) ليبدو كأنه إنسان طبيعي يتجنب حظر جوجل (Spam). (يتجاهل تكرار التشغيل الثابت).
+                        </p>
                     </div>
                 </div>
 
@@ -452,12 +472,7 @@
             return items;
         }
 
-        function collectSettings() {
-            const modules = {};
-            document.querySelectorAll('#moduleGrid input[type=checkbox]').forEach(cb => {
-                modules[cb.dataset.module] = cb.checked;
-            });
-
+        function getSelectedRegions() {
             const regions = [];
             document.querySelectorAll('.region-chip.active').forEach(el => {
                 regions.push(el.dataset.region);
