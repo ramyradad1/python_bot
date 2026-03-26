@@ -543,21 +543,24 @@ YOUR TASK: Using the raw technical data below, write a **100% unique, comprehens
    - Wrap multi-line commands and scripts in <pre><code> blocks
    - Wrap inline single commands in <code> tags
 
-4. **SEO RULES**:
+4. **SEO RULES & FORMATTING**:
    - Write at minimum 1200 words (longer articles with real solutions rank better)
    - Use the primary error code/keyword naturally 4-6 times throughout
    - Each <h2> must contain relevant keywords
-   - Write short paragraphs (2-4 sentences max)
-   - Use bullet points for scannable content
+   - Write short paragraphs (2-4 sentences max) to make it highly scannable
+   - Use bullet points for any lists
    - Include at least 2 <blockquote> blocks — one as a warning and one as a pro tip
+   - **EMOJIS**: Use contextual, professional emojis throughout the article to break up text and keep the reader engaged (e.g., 🚀, 🛠️, ⚠️, 💡, 💻, ✅, ❌). Don't overdo it, but make sure they are present in headings and key points.
 
-5. **WRITING STYLE**:
-   - Write like a senior IT professional explaining to a competent colleague
-   - Be direct, practical, and authoritative — every sentence must add value
-   - No fluff, no filler, no generic introductions
-   - Use contractions naturally (don't, won't, it's)
-   - Avoid AI-sounding phrases: "In today's world", "It's worth noting", "landscape", "crucial", "leverage", "delve", "Moreover", "Furthermore"
-   - When explaining a command, briefly say WHAT it does and WHY, not just list it
+5. **WRITING STYLE (HUMAN-LIKE & ENGAGING)**:
+   - Write like a highly experienced, friendly senior IT professional explaining a problem to a colleague over coffee.
+   - The tone MUST be human, relatable, conversational, and empathetic to the user's frustration.
+   - Be direct, practical, and clear — every sentence must add value and guide the user.
+   - No fluff, no robotic filler, no generic introductions. Start strong.
+   - Use contractions naturally (don't, won't, it's, you'll).
+   - Talk DIRECTLY to the reader ("You're probably seeing...", "If you've tried everything...").
+   - **AVOID AI CLICHÉS COMPLETELY**: Do not use phrases like "In today's fast-paced digital world", "It's worth noting", "Navigating the landscape", "Crucial", "Leverage", "Delve", "Moreover", "Furthermore", "A testament to".
+   - When explaining a command, briefly explain WHAT it does in simple terms, not just list it.
 
 6. **ORIGINALITY**:
    - Do NOT copy sentences from the source data
@@ -630,7 +633,7 @@ def generate_thumbnail(client: genai.Client, topic: str, stop_check=None) -> str
         f"a technician's workstation with diagnostic screens, or a close-up of a computer "
         f"displaying an error screen. "
         f"Lighting should be dramatic and cinematic with cool blue tones. "
-        f"Style: sharp focus, 8K resolution, professional tech magazine cover quality. "
+        f"Style: sharp focus, 4K resolution, professional tech magazine cover quality. "
         f"NO cartoons, NO illustrations, NO text overlays, NO watermarks."
     )
 
