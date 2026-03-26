@@ -502,45 +502,64 @@ def generate_article(
     if target_niche:
         niche_context = f"\nTARGET NICHE: {target_niche} (high-CPC, commercial-intent audience)\n"
 
-    prompt = f"""You are an SEO Expert and Senior Tech Blogger specializing in IT troubleshooting.
+    prompt = f"""You are a Senior Systems Engineer and IT Troubleshooting Expert who writes technical articles.
 {niche_context}
-YOUR TASK: Using the raw technical data below, write a **100% unique, comprehensive troubleshooting guide** article. This must NOT be a direct translation, rewrite, or summary of the source material. You must synthesize the information into an original, authoritative guide.
+YOUR TASK: Using the raw technical data below, write a **100% unique, comprehensive troubleshooting guide** article that provides REAL, WORKING solutions. This must NOT be a direct translation, rewrite, or summary of the source material. You must synthesize the information into an original, authoritative guide with ACTIONABLE fixes.
 
 === RAW TECHNICAL DATA ===
 {data_brief}
 
 === ARTICLE REQUIREMENTS ===
 
-1. **FORMAT**: Output clean HTML using ONLY these tags: <h2>, <h3>, <p>, <ul>, <li>, <ol>, <strong>, <em>, <code>, <blockquote>. Do NOT include <html>, <head>, <body>, or <doctype> tags.
+1. **FORMAT**: Output clean HTML using ONLY these tags: <h2>, <h3>, <p>, <ul>, <li>, <ol>, <strong>, <em>, <code>, <pre>, <blockquote>. Do NOT include <html>, <head>, <body>, or <doctype> tags.
 
 2. **STRUCTURE** (follow this exact structure):
    - <h2> — A compelling, SEO-friendly main title about the error/problem
    - <p> — Introduction paragraph: what this error is and why it matters (include primary keyword in the first 100 words)
-   - <h2>What Causes [Error Name/Code]?</h2> — Root cause analysis
-   - <h2>Symptoms You'll Notice</h2> — Observable signs of the problem
-   - <h2>Step-by-Step Troubleshooting Guide</h2> — Numbered, actionable fixes
-     - Use <h3> for each major fix method
-     - Include any relevant commands in <code> tags
-   - <h2>Advanced Solutions</h2> — For power users (registry edits, CLI tools, etc.)
-   - <h2>How to Prevent This Error</h2> — Preventive measures
+   - <h2>What Causes [Error Name/Code]?</h2> — Root cause analysis with SPECIFIC technical reasons (e.g., "corrupted WMI repository", "misconfigured SPN in Active Directory", "TCP port 443 blocked by firewall rule")
+   - <h2>Symptoms You'll Notice</h2> — Observable signs with EXACT error messages the user will see
+   - <h2>Step-by-Step Troubleshooting Guide</h2> — Numbered, actionable fixes with REAL COMMANDS
+     - Use <h3> for each major fix method (e.g., "Fix 1: Repair Corrupted System Files Using SFC and DISM")
+     - Every fix MUST include real executable commands wrapped in <pre><code> blocks
+     - Show the EXACT command syntax, flags, and parameters
+     - Include expected output so the user knows if it worked
+   - <h2>Advanced Solutions</h2> — For power users with:
+     - Real registry paths (e.g., HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\...)
+     - Real PowerShell scripts (multi-line, copy-paste ready)
+     - Real config file edits with exact file paths and syntax
+     - Real Group Policy paths if applicable
+   - <h2>How to Prevent This Error</h2> — Concrete preventive measures with specific tools and settings
    - <h2>Final Verdict</h2> — Summary of the best approach, when to seek professional help
 
-3. **SEO RULES**:
-   - Write at minimum 900 words
+3. **COMMANDS AND SOLUTIONS — CRITICAL RULES**:
+   - Every command MUST be a REAL, WORKING command that can be copy-pasted and executed
+   - Use REAL Windows commands: sfc /scannow, DISM /Online /Cleanup-Image /RestoreHealth, netsh, ipconfig, Get-EventLog, etc.
+   - Use REAL Linux commands: systemctl, journalctl, chmod, iptables, apt-get, yum, docker logs, kubectl, etc.
+   - Use REAL PowerShell cmdlets: Get-Service, Restart-Service, Set-ItemProperty, Test-NetConnection, etc.
+   - Include REAL registry paths, REAL config file paths, and REAL log file locations
+   - NEVER write generic placeholder commands like "run the repair tool" or "use the command to fix it"
+   - NEVER say "replace X with your value" without showing the actual command structure
+   - Include at least 5-8 distinct executable commands throughout the article
+   - Wrap multi-line commands and scripts in <pre><code> blocks
+   - Wrap inline single commands in <code> tags
+
+4. **SEO RULES**:
+   - Write at minimum 1200 words (longer articles with real solutions rank better)
    - Use the primary error code/keyword naturally 4-6 times throughout
    - Each <h2> must contain relevant keywords
    - Write short paragraphs (2-4 sentences max)
    - Use bullet points for scannable content
-   - Include at least one <blockquote> with an important technical note or warning
+   - Include at least 2 <blockquote> blocks — one as a warning and one as a pro tip
 
-4. **WRITING STYLE**:
+5. **WRITING STYLE**:
    - Write like a senior IT professional explaining to a competent colleague
-   - Be direct, practical, and authoritative
+   - Be direct, practical, and authoritative — every sentence must add value
    - No fluff, no filler, no generic introductions
    - Use contractions naturally (don't, won't, it's)
    - Avoid AI-sounding phrases: "In today's world", "It's worth noting", "landscape", "crucial", "leverage", "delve", "Moreover", "Furthermore"
+   - When explaining a command, briefly say WHAT it does and WHY, not just list it
 
-5. **ORIGINALITY**:
+6. **ORIGINALITY**:
    - Do NOT copy sentences from the source data
    - Synthesize and restructure the information completely
    - The article must pass plagiarism checks
@@ -704,8 +723,9 @@ def save_article(article_html: str, topic: str) -> str | None:
         p {{ margin-bottom: 1rem; }}
         ul, ol {{ margin: 1rem 0 1rem 1.5rem; }}
         li {{ margin-bottom: 0.5rem; }}
-        code {{ background: #1a1a2e; color: #00ff88; padding: 0.2rem 0.5rem; border-radius: 4px; font-family: monospace; }}
-        pre code {{ display: block; padding: 1rem; overflow-x: auto; margin: 1rem 0; }}
+        code {{ background: #1a1a2e; color: #00ff88; padding: 0.2rem 0.5rem; border-radius: 4px; font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace; font-size: 0.9rem; }}
+        pre {{ background: #1a1a2e; border-radius: 8px; margin: 1.2rem 0; overflow-x: auto; border: 1px solid #2d2d4e; }}
+        pre code {{ display: block; padding: 1.2rem 1.5rem; line-height: 1.6; color: #00ff88; white-space: pre-wrap; word-wrap: break-word; }}
         blockquote {{ border-left: 4px solid #e94560; background: #eef2ff; padding: 1rem 1.5rem; margin: 1.5rem 0; font-style: italic; border-radius: 0 8px 8px 0; }}
     </style>
 </head>
