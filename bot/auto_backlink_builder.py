@@ -1,12 +1,12 @@
 import threading
-from duckduckgo_search import DDGS
+from ddgs import DDGS
 from .logger import log_info
 
 import multiprocessing
 
 def _run_ddgs_search(query, queue):
     try:
-        from duckduckgo_search import DDGS
+        from ddgs import DDGS
         links = []
         with DDGS(timeout=10) as ddgs:
             results = ddgs.text(query, max_results=2)

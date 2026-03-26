@@ -12,7 +12,7 @@ beautifulsoup4
 lxml
 
 # Keyword-Driven Source Discovery
-duckduckgo-search
+ddgs
 
 # Environment Variable Management
 python-dotenv

@@ -5,9 +5,9 @@ from google import genai
 from .key_manager import get_next_api_key
 from .logger import log_info
 
-# Try to use duckduckgo_search for free web search if no API key is provided
+# Try to use ddgs for free web search if no API key is provided
 try:
-    from duckduckgo_search import DDGS
+    from ddgs import DDGS
     HAS_DDG = True
 except ImportError:
     HAS_DDG = False
@@ -31,7 +31,7 @@ def save_dynamic_settings(settings: dict):
 def _search_with_timeout(query: str, timeout_sec: int = 20) -> str:
     """Run DDGS search synchronously (DDGS already supports timeout). Removed multiprocessing to fix Windows hangs."""
     try:
-        from duckduckgo_search import DDGS
+        from ddgs import DDGS
         text = ""
         with DDGS(timeout=timeout_sec) as ddgs:
             results = list(ddgs.text(query, max_results=5))

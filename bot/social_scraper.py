@@ -24,7 +24,7 @@ import multiprocessing
 
 def _run_ddgs_search(subreddits, queue):
     try:
-        from duckduckgo_search import DDGS
+        from ddgs import DDGS
         problems = []
         with DDGS(timeout=10) as ddgs:
             for sub in subreddits:

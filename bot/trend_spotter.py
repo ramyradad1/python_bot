@@ -1,6 +1,6 @@
 import time
 import threading
-from duckduckgo_search import DDGS
+from ddgs import DDGS
 from .logger import log_info
 from .seo_agent import load_dynamic_settings
 
@@ -29,7 +29,7 @@ import multiprocessing
 
 def _run_ddgs_news(regions, region_map, queue):
     try:
-        from duckduckgo_search import DDGS
+        from ddgs import DDGS
         import time
         results_list = []
         with DDGS(timeout=10) as ddgs:

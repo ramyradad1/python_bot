@@ -21,7 +21,7 @@ import multiprocessing
 
 def _run_ddgs_search(competitors, queue):
     try:
-        from duckduckgo_search import DDGS
+        from ddgs import DDGS
         missing_keywords = []
         with DDGS(timeout=10) as ddgs:
             for comp in competitors[:3]:
