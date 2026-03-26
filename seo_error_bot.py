@@ -727,13 +727,50 @@ def save_article(article_html: str, topic: str) -> str | None:
         ul, ol {{ margin: 1rem 0 1rem 1.5rem; }}
         li {{ margin-bottom: 0.5rem; }}
         code {{ background: #1a1a2e; color: #00ff88; padding: 0.2rem 0.5rem; border-radius: 4px; font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace; font-size: 0.9rem; }}
-        pre {{ background: #1a1a2e; border-radius: 8px; margin: 1.2rem 0; overflow-x: auto; border: 1px solid #2d2d4e; }}
-        pre code {{ display: block; padding: 1.2rem 1.5rem; line-height: 1.6; color: #00ff88; white-space: pre-wrap; word-wrap: break-word; }}
+        pre {{ background: #1a1a2e; border-radius: 8px; margin: 1.2rem 0; overflow-x: auto; border: 1px solid #2d2d4e; position: relative; padding-top: 2rem; }}
+        pre code {{ display: block; padding: 0 1.5rem 1.2rem; line-height: 1.6; color: #00ff88; white-space: pre-wrap; word-wrap: break-word; }}
         blockquote {{ border-left: 4px solid #e94560; background: #eef2ff; padding: 1rem 1.5rem; margin: 1.5rem 0; font-style: italic; border-radius: 0 8px 8px 0; }}
+        .copy-btn {{
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: #2d2d4e;
+            color: #fff;
+            border: none;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }}
+        .copy-btn:hover {{ background: #e94560; }}
     </style>
 </head>
 <body>
 {article_html}
+
+<script>
+    document.querySelectorAll('pre').forEach(function(pre) {{
+        var btn = document.createElement('button');
+        btn.innerText = 'Copy';
+        btn.className = 'copy-btn';
+        pre.appendChild(btn);
+        
+        btn.addEventListener('click', function() {{
+            var code = pre.querySelector('code').innerText;
+            navigator.clipboard.writeText(code).then(function() {{
+                btn.innerText = 'Copied!';
+                btn.style.background = '#00ff88';
+                btn.style.color = '#1a1a2e';
+                setTimeout(function() {{
+                    btn.innerText = 'Copy';
+                    btn.style.background = '#2d2d4e';
+                    btn.style.color = '#fff';
+                }}, 2000);
+            }});
+        }});
+    }});
+</script>
 </body>
 </html>"""
 
